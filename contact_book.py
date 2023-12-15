@@ -339,11 +339,12 @@ class AssistantBot:
         name = input('Enter name=> ')
         result = self.phone_book.delete(name)
         return result
+    
     # "меню" для удаления       
     @input_error
     def delete(self):
         print('='*100)
-        print('Please enter the number\nYou can delete:\n1.CONTACT\n2.INFO IN AN EXISTING CONTACT')  #PHONE NUMBER\n2.DATE OF BIRTHDAY')
+        print('Please enter the number\nYou can delete:\n1.CONTACT\n2.INFO IN AN EXISTING CONTACT')
         res = input('Enter your text=>  ').lower()
         if res in ('1', 'contact'):
             result = self.delete_contact()
