@@ -51,6 +51,46 @@ class Phone(Field):
         self.__value = value
 
 
+class Note:
+    def __init__(self, content, tags=None):
+        if tags is None:
+            tags = []
+        self.content = content
+        self.tags = tags
+
+
+class NotesManager:
+    def __init__(self):
+        self.notes = []
+
+    def add_note(self, content, tags=None):
+        if tags is None:
+            tags = []
+        note = Note(content, tags)
+        self.notes.append(note)
+
+    def search_notes_by_tag(self, tag):
+        return [note for note in self.notes if tag in note.tags]
+
+    def display_all_notes(self):
+        if not self.notes:
+            print('List empty')
+        for i, note in enumerate(self.notes, 1):
+            print(f"{i}. Content:{note.content}, Tags:{note.tags}")
+
+    def edit_note_content(self, index, new_content):
+        if 1 <= index <= len(self.notes):
+            self.notes[index - 1].content = new_content
+        else:
+            print("Invalid note index.")
+
+    def delete_note_by_index(self, index):
+        if 1 <= index <= len(self.notes):
+            del self.notes[index - 1]
+        else:
+            print("Invalid note index.")
+
+
 class Record:
     def __init__(self, name: str):
         self.name = Name(name)
@@ -90,7 +130,7 @@ class Record:
         date_today = date.today()
         birthday_date = self.birthday.value.replace(year=date_today.year)
         if date_today == birthday_date:
-            return 'Birsday today'
+            return 'Birthday today'
         if birthday_date <= date_today - timedelta(days=1):
             birthday_date = birthday_date.replace(year=date_today.year + 1)
         day_to_birthday = (birthday_date - date_today).days
@@ -137,7 +177,6 @@ class AddressBook(UserDict):
         else:
             return f'The contact {name} not found'
         
-
     def iterator(self, item_number):
         counter = 0
         result = ''
@@ -159,12 +198,15 @@ class AddressBook(UserDict):
             self.data = pickle.load(file)
         return self.data
         
+
 class Controller(cmd.Cmd):
     def exit(self):
         self.book.dump()
         return True 
 
- # декоратор по исправлению ошибок. НАПИСАН КОРЯВО, нужно редактировать!!!
+    # декоратор по исправлению ошибок. НАПИСАН КОРЯВО, нужно редактировать!!!
+
+
 def input_error(func):
     def inner(*args, **kwargs):
         try:
@@ -180,6 +222,8 @@ def input_error(func):
 
 
 '''эта часть кода отвечает за выполнение команд'''
+
+
 class AssistantBot:
     def __init__(self):
         self.phone_book = AddressBook()
@@ -276,7 +320,7 @@ class AssistantBot:
                 result = self.change_phone(record)
         return result
     
-      # удаление номера    
+        # удаление номера
     @input_error
     def delete_phone(self, record: Record):
         phone = input('Enter phone=> ')
@@ -349,17 +393,19 @@ class AssistantBot:
         if res_1.isdigit():
             return self.phone_book.iterator(res_1)
         
-     # выход из програмы и сохранение файла!
+        # выход из програмы и сохранение файла!
     def exit(self):
         self.phone_book.write_to_file()
         return 
 
 # эта часть отвечает за команды телефонной книги, нет адреса и email  
+
+
 def main():
     assistent_bot = AssistantBot()
     print('Hello!')
     while True:
-        print('='*100)
+        print('=' * 100)
         print('How can I help you?\nPlease enter the number:\n1.ADD\n2.CHANGE\n3.DELETE\n4.SEARCH\n5.SHOW ALL\n6.EXIT')
         command = input('Enter your text=>  ').lower()
         if command in ('1', 'add'):
@@ -371,7 +417,7 @@ def main():
         if command in ('4', 'search'):
             result = assistent_bot.search() 
         if command in ('5', 'show all', 'show'):
-            result = assistent_bot.show_all()   
+            result = assistent_bot.show_all()
         if command in ('6', 'exit'):
             assistent_bot.exit()
             print('Good bye!')
