@@ -256,14 +256,32 @@ class AssistantBot:
     
     # добавление даты рождения
     @input_error   
-    def add_birthday(self, record):
-        year = input('Enter the year=> ')
-        month = input('Enter the month=> ')
-        day = input('Enter the day=> ')
+    def add_birthday(self, record: Record):              # исправила ввод даты, осталось исправить если дата например 2000.67.98
+        year = ''
+        month = ''
+        day = ''
+        while True:
+            year = input('Enter the year=> ')
+            if not year.isdigit():
+                print('Year must be 4 digit')
+            if len(year) == 4 and year.isdigit():   
+                break 
+        while True: 
+            month = input('Enter the month=> ')
+            if not month.isdigit():
+                print('Month must be 2 digit. For exemple, January will be => 01')
+            if  len(month) == 2 and month.isdigit():   
+                break
+        while True:
+            day = input('Enter the day=> ')
+            if not day.isdigit():
+                print('Day must be 2 digit')
+            if len(day) == 2 and day.isdigit():
+                break
         birth = f'{year}.{month}.{day}'
         record.add_birthday(birth)
         self.phone_book.add_record(record)
-        return f'You added the date of birthday {birth} to the contact:\n{str(record)} '
+        return f'You added the date of birthday {birth} to the contact:\n{str(record)}'
      
     # "меню" для добавления  
     @input_error
@@ -275,7 +293,7 @@ class AssistantBot:
             result = self.add_contact()
         else:
             name = input('Enter the name of an existing contact=> ')
-            record: Record = self.phone_book.find(name)
+            record: Record = self.phone_book.find(name)               #не знаю как обработать если контакт не существует....!!!!!!!
             if res in ('2', 'phone'):
                 result = self.add_phone(record)
             if res in ('3', 'birthday'):
@@ -410,18 +428,20 @@ def main():
         command = input('Enter your text=>  ').lower()
         if command in ('1', 'add'):
             result = assistent_bot.add()
-        if command in ('2', 'change'):
+        elif command in ('2', 'change'):
             result = assistent_bot.change()
-        if command in ('3', 'delete'):
+        elif command in ('3', 'delete'):
             result = assistent_bot.delete()
-        if command in ('4', 'search'):
+        elif command in ('4', 'search'):
             result = assistent_bot.search() 
-        if command in ('5', 'show all', 'show'):
-            result = assistent_bot.show_all()
-        if command in ('6', 'exit'):
+        elif command in ('5', 'show all', 'show'):
+            result = assistent_bot.show_all()   
+        elif command in ('6', 'exit'):
             assistent_bot.exit()
             print('Good bye!')
             break
+        else:
+            result = 'Command not found, try again'
         print(result)
 
 
