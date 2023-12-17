@@ -51,44 +51,6 @@ class Phone(Field):
         self.__value = value
 
 
-class Note:
-    def __init__(self, content, tags=None):
-        if tags is None:
-            tags = []
-        self.content = content
-        self.tags = tags
-
-
-class NotesManager:
-    def __init__(self):
-        self.notes = []
-
-    def add_note(self, content, tags=None):
-        if tags is None:
-            tags = []
-        note = Note(content, tags)
-        self.notes.append(note)
-
-    def search_notes_by_tag(self, tag):
-        return [note for note in self.notes if tag in note.tags]
-
-    def display_all_notes(self):
-        if not self.notes:
-            print('List empty')
-        for i, note in enumerate(self.notes, 1):
-            print(f"{i}. Content:{note.content}, Tags:{note.tags}")
-
-    def edit_note_content(self, index, new_content):
-        if 1 <= index <= len(self.notes):
-            self.notes[index - 1].content = new_content
-        else:
-            print("Invalid note index.")
-
-    def delete_note_by_index(self, index):
-        if 1 <= index <= len(self.notes):
-            del self.notes[index - 1]
-        else:
-            print("Invalid note index.")
 
 
 class Record:
