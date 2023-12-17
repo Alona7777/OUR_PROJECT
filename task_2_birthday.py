@@ -86,7 +86,6 @@ def birthday_in_given_days(value):
     return contact_birth
     
 
-
 if __name__ == "__main__":
 
     birth = birthdays_for_date('2023.12.19')

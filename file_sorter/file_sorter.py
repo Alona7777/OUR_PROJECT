@@ -25,6 +25,8 @@ def normalize(name: str) -> str:
 
 # file_parser
 # Створюємо порожні списки для зображень
+
+
 JPEG_IMAGES = []
 JPG_IMAGES = []
 PNG_IMAGES = []
