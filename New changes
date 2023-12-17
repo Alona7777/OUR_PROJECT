@@ -151,8 +151,10 @@ class AddressBook(UserDict):
         self.data[record.name.value] = record
 
     def find(self, name: str):
-        if name in self.data:
-            return self.data[name]
+        lower_name = name.lower()
+        for key, record in self.data.items():
+            if key.lower() == lower_name:
+                return record
         return None
         
     def search(self, value: str):                    
@@ -235,16 +237,32 @@ class AssistantBot:
     def add_contact(self):
         name = input('Enter name=> ')
         record = Record(name)
-        print('Do you want to add the phone number? Please enter the number:\n1.YES\n2.NO')
-        res_1 = input('Enter your text=>  ').lower()
-        if res_1 == '1' or res_1 == 'yes':
-            self.add_phone(record)
-        print('Do you want to add the date of birthday? Please enter the number:\n1.YES\n2.NO')
-        res_2 = input('Enter your text=>  ').lower()
-        if res_2 == '1' or res_2 == 'yes':
-            self.add_birthday(record)
+
+        while True:
+            print('Do you want to add the phone number? Please enter the number:\n1.YES\n2.NO')
+            res_1 = input('Enter your text=>  ').lower()
+            if res_1 in ('1', 'yes'):
+                self.add_phone(record)
+                break
+            elif res_1 in ('2', 'no'):
+                break
+            else:
+                print("Invalid input. Please enter '1' for YES or '2' for NO.")
+
+        while True:
+            print('Do you want to add the date of birthday? Please enter the number:\n1.YES\n2.NO')
+            res_2 = input('Enter your text=>  ').lower()
+            if res_2 in ('1', 'yes'):
+                self.add_birthday(record)
+                break
+            elif res_2 in ('2', 'no'):
+                break
+            else:
+                print("Invalid input. Please enter '1' for YES or '2' for NO.")
+
         self.phone_book.add_record(record)
         return f'You have created a new contact:\n{str(record)}'
+
     
     @input_error
     def add_phone(self, record):
@@ -303,7 +321,153 @@ class AssistantBot:
             print('Please enter a valid date in format YYYY.MM.DD')
             return self.add_birthday(record)  # Повторный вызов функции при ошибке ввода
      
+    def search_contact_for_deletion(self):
+        print("Search contact for deletion by:\n1. Name\n2. Phone Number\n3. Birthday")
+        choice = input("Enter your choice (1, 2, or 3)=> ").strip()
+
+        if choice == "1":
+            name = input("Enter the name of the contact=> ")
+            return self.phone_book.find(name)
+        elif choice == "2":
+            phone = input("Enter the phone number=> ")
+            for record in self.phone_book.values():
+                if any(phone == p.value for p in record.phones):
+                    return record
+        elif choice == "3":
+            birthday_input = input("Enter the birthday (YYYY.MM.DD)=> ")
+            for record in self.phone_book.values():
+                if record.birthday and record.birthday.value.strftime('%Y.%m.%d') == birthday_input:
+                    return record
+                
+    def valid_birthday_format(self, birthday_input):
+        try:
+            datetime.strptime(birthday_input, '%Y.%m.%d')
+            return True
+        except ValueError:
+            return False
+
+    def input_birthday(self):
+        while True:
+            birthday_input = input("Enter the birthday (YYYY.MM.DD)=> ")
+            if self.valid_birthday_format(birthday_input):
+                return birthday_input
+            else:
+                print("Invalid format. Please enter a valid date in format YYYY.MM.DD.")
+    def search_contact_for_deletion(self):
+        while True:
+            print("Search contact for deletion by:\n1. Name\n2. Phone Number\n3. Birthday\n4. RETURN TO MAIN MENU")
+            choice = input("Enter your choice (1, 2, 3 or 4)=> ").strip()
+
+            if choice == "1":
+                name = input("Enter the name of the contact=> ")
+                return self.phone_book.find(name)
+            elif choice == "2":
+                phone = input("Enter the phone number=> ")
+                for record in self.phone_book.values():
+                    if any(phone == p.value for p in record.phones):
+                        return record
+            elif choice == "3":
+                birthday_input = input("Enter the birthday (YYYY.MM.DD)=> ")
+                if self.valid_birthday_format(birthday_input):
+                    for record in self.phone_book.values():
+                        if record.birthday and record.birthday.value.strftime('%Y.%m.%d') == birthday_input:
+                            return record
+                    print("Contact not found.")
+                else:
+                    print("The format is incorrect. Please try again.")
+            elif choice == "4":
+                return None
+
+    def delete_contact(self):
+        record = self.search_contact_for_deletion()
+        if not record:
+            print("Contact not found.")
+            return
+
+        print("Found contact:")
+        print(record)
+        confirmation = input("Are you sure you want to delete this contact? (yes/no)=> ").lower()
+        if confirmation == "yes":
+            del self.phone_book[record.name.value]
+            print("Contact deleted.")
+        else:
+            print("Deletion cancelled.")
+
+    def valid_birthday_format(self, birthday_input):
+        try:
+            datetime.strptime(birthday_input, '%Y.%m.%d')
+            return True
+        except ValueError:
+            return False
+
+    def search_contact_for_deletion(self):
+        while True:
+            print("Search contact for deletion by:\n1. Name\n2. Phone Number\n3. Birthday\n4. RETURN TO MAIN MENU")
+            choice = input("Enter your choice (1, 2, 3 or 4)=> ").strip()
+
+            if choice == "1":
+                name = input("Enter the name of the contact=> ")
+                contact = self.phone_book.find(name)
+                if contact:
+                    return contact
+                else:
+                    print("Contact not found.")
+            elif choice == "2":
+                phone = input("Enter the phone number=> ")
+                found = False
+                for record in self.phone_book.values():
+                    if any(phone == p.value for p in record.phones):
+                        found = True
+                        return record
+                if not found:
+                    print("Phone number not found.")
+            elif choice == "3":
+                while True:
+                    birthday_input = input("Enter the birthday (YYYY.MM.DD)=> ")
+                    if self.valid_birthday_format(birthday_input):
+                        for record in self.phone_book.values():
+                            if record.birthday and record.birthday.value.strftime('%Y.%m.%d') == birthday_input:
+                                return record
+                        print("Birthday not found.")
+                        break
+                    else:
+                        print("The format is incorrect. Please try again.")
+            elif choice == "4":
+                return None
+
+    def delete_contact(self):
+        record = self.search_contact_for_deletion()
+        if not record:
+            print("Contact not found.")
+            return
+
+        print("Found contact:")
+        print(record)
+        confirmation = input("Are you sure you want to delete this contact? (yes/no)=> ").lower()
+        if confirmation == "yes":
+            del self.phone_book[record.name.value]
+            print("Contact deleted.")
+        else:
+            print("Deletion cancelled.")
+
+    @input_error
+    def delete(self):
+        while True:
+            print('='*100)
+            print('You can delete:\n1.CONTACT\n2.RETURN TO MAIN MENU')
+            choice = input('Enter your text=> ').lower()
+
+            if choice == '1':
+                self.delete_contact()
+                break  # Exit the loop after deleting the contact
+            elif choice == '2':
+                break  # Exit the loop to return to the main menu
+            else:
+                print("Invalid choice. Please enter again.")
+
     # "меню" для добавления  
+
+
     @input_error
     def add(self):
         while True:
@@ -363,8 +527,6 @@ class AssistantBot:
         self.add_birthday(record)
         return f'You changed the contact:\n{str(record)}' 
     
-    # "меню" для изменения 
-    @input_error
 
     @input_error
     def change(self):
@@ -389,8 +551,12 @@ class AssistantBot:
 
             else:
                 print("The answer doesn't exist. Please enter again")
+    
     @input_error
     def change_name(self, record):
+        if not record:
+            print('\033[91mThe contact was not found\033[0m')
+            return
         new_name = input('Enter new name=> ')
         if new_name:
             old_name = record.name.value
@@ -399,51 +565,37 @@ class AssistantBot:
             return f'Name changed successfully from {old_name} to {new_name}'
         else:
             return 'Name change cancelled'
+        
+    def valid_birthday_format(self, birthday_input):
+        try:
+            datetime.strptime(birthday_input, '%Y.%m.%d')
+            return True
+        except ValueError:
+            return False
 
-        # удаление номера
-    def delete_contact(self):
-        name = input('Enter the name of the contact to delete=> ')
-        if name in self.phone_book:
-            del self.phone_book[name]
-            print(f'Contact {name} has been deleted.')
-        else:
-            print('Contact not found.')
-
-    @input_error
-    def delete(self):
+    def input_birthday(self):
         while True:
-            print('='*100)
-            print('You can delete:\n1.CONTACT\n2.RETURN TO MAIN MENU')
-            choice = input('Enter your text=> ').lower()
-
-            if choice == '1':
-                self.delete_contact()
-                break  # Выход из цикла после удаления контакта
-            elif choice == '2':
-                break  # Выход из цикла для возврата в главное меню
+            birthday_input = input("Enter the birthday (YYYY.MM.DD)=> ")
+            if self.valid_birthday_format(birthday_input):
+                return birthday_input
             else:
-                print("Invalid choice. Please enter again.")
+                print("Invalid format. Please enter a valid date in format YYYY.MM.DD.")
 
-    @input_error
-    def delete_phone(self, record: Record):
-        phone = input('Enter phone=> ')
-        result = record.remove_phone(phone)
-        return result
-    
-    # удаление даты рождения
-    @input_error   
-    def delete_birth(self, record):
-        record.birthday = None
-        return 'Date of birth removed'
-    
-    # удаление контакта
-    @input_error       
-    def delete_contact(self):
-        name = input('Enter name=> ')
-        result = self.phone_book.delete(name)
-        return result
-    
-    # "меню" для удаления       
+    def add_birthday(self, record):
+        if not record:
+            print('\033[91mThe contact does not exist\033[0m')
+            return
+
+        birthday_input = self.input_birthday()
+        try:
+            record.add_birthday(birthday_input)
+            self.phone_book.add_record(record)
+            return f'You added the date of birthday {birthday_input} to the contact:\n{str(record)}'
+        except ValueError as e:
+            print(e)
+            return self.add_birthday(record)  # Повторный вызов функции при ошибке ввода
+
+         
     @input_error
     def change(self):
         while True:
@@ -547,4 +699,5 @@ def main():
             print(result)
 
 if __name__ == "__main__":
-    main()
+    main()     
+       
