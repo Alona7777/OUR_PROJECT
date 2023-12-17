@@ -38,6 +38,8 @@ class Birthday(Field):
         except ValueError:
             raise ValueError('The birsday date must be in format: 2022.01.01')
 
+    def __str__(self):
+        return self.__value.strftime('%Y.%m.%d')
 
 class Phone(Field):
     @property
@@ -50,7 +52,7 @@ class Phone(Field):
             raise ValueError('The phone number should be digits only and have 10 symbols')
         self.__value = value
 
-
+    
 class Note:
     def __init__(self, content, tags=None):
         if tags is None:
@@ -137,8 +139,10 @@ class Record:
         return day_to_birthday
 
     def __str__(self):
-        return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; " \
-               f"|| Day to birthday: {self.days_to_birthday()}||"
+        return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; "\
+               f"|| Birthday: {self.birthday} "\
+               f"|| Days to birthday: {self.days_to_birthday()}||"
+
         # return '||Name: {:^10}||Phones: {:<20}||Day to Birthday: {:^7}'.format(self.name.value, '; '.join(p.value for p in self.phones), self.days_to_birthday())
 
 
