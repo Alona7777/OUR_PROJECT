@@ -422,6 +422,8 @@ def main():
             assistent_bot.exit()
             print('Good bye!')
             break
+        else:
+            result = 'Command not found, try again'   # вариант исправления ошибки с неправильной командой
         print(result)
 
 
