@@ -3,6 +3,7 @@ import cmd
 from datetime import date, datetime, timedelta
 import pickle
 import os
+import re
 
 
 class Field:
@@ -25,6 +26,29 @@ class Field:
 class Name(Field):
     pass
 
+class Address(Field):
+    @property
+    def value(self):
+        return self.__value
+    @value.setter
+    def value(self, value: str):
+        self.__value = value
+
+    def __str__(self):
+        return str(self.__value) 
+    
+class Email(Field):
+    @property
+    def value(self):
+        return self.__value
+    @value.setter
+    def value(self, value: str):
+        pattern = r"^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        if re.match(pattern, value) is None:
+            raise ValueError('Invalid email')
+        self.__value = value
+    def __str__(self):
+        return str(self.__value)   
 
 class Birthday(Field):
     @property
@@ -36,7 +60,10 @@ class Birthday(Field):
         try:
             self.__value = datetime.strptime(value, '%Y.%m.%d').date()
         except ValueError:
-            raise ValueError('The birsday date must be in format: 2022.01.01')
+            raise ValueError('No such date exists')
+        
+    def __str__(self):
+        return self.__value.strftime('%Y.%m.%d')
 
 
 class Phone(Field):
@@ -56,10 +83,18 @@ class Record:
         self.name = Name(name)
         self.phones = []
         self.birthday = None
+        self.email = None
+        self.address = None
 
     def add_phone(self, value: str):
         phone = Phone(value)
         self.phones.append(phone)
+    
+    def add_email(self, value: str):
+        self.email = Email(value)
+    
+    def add_address(self, value: str):
+        self.address = Address(value)
 
     def add_birthday(self, birthday: str):
         self.birthday = Birthday(birthday)
@@ -97,9 +132,11 @@ class Record:
         return day_to_birthday
 
     def __str__(self):
-        return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; " \
-               f"|| Day to birthday: {self.days_to_birthday()}||"
-        # return '||Name: {:^10}||Phones: {:<20}||Day to Birthday: {:^7}'.format(self.name.value, '; '.join(p.value for p in self.phones), self.days_to_birthday())
+        # return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; " \
+        #        f"|| Day to birthday: {self.days_to_birthday()}||"
+         return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; "\
+               f"|| Birthday: {self.birthday}  || Email: {self.email}  || Adress: {self.address}"\
+               f"|| Days to birthday: {self.days_to_birthday()}||"
 
 
 class AddressBook(UserDict):
@@ -195,35 +232,83 @@ class AssistantBot:
     def add_contact(self):
         name = input('Enter name=> ')
         record = Record(name)
-        print('Do you want to add the phone number? Please enter the number:\n1.YES\n2.NO')
-        res_1 = input('Enter your text=>  ').lower()
-        if res_1 == '1' or res_1 == 'yes':
-            self.add_phone(record)
-        print('Do you want to add the date of birthday? Please enter the number:\n1.YES\n2.NO')
-        res_2 = input('Enter your text=>  ').lower()
-        if res_2 == '1' or res_2 == 'yes':
-            self.add_birthday(record)
+        while True:
+            print('Do you want to add the phone number? Please enter the number:\n1.YES\n2.NO')
+            res_1 = input('Enter your text=>  ').lower()
+            if res_1 in ('1', 'yes'):
+                self.add_phone(record)
+                print('Do you want to add anothe phone number? Please enter the number:\n1.YES\n2.NO')
+                res_2 = input('Enter your text=>  ').lower()
+                if res_2 in ('1', 'yes'):
+                    self.add_phone(record)
+            elif res_1 in ('2', 'no'):
+                break
+            else:
+                print("Invalid input. Please enter '1' for YES or '2' for NO.")
+        while True:
+            print('Do you want to add the date of birthday? Please enter the number:\n1.YES\n2.NO')
+            res_2 = input('Enter your text=>  ').lower()
+            if res_2 in ('1', 'yes'):
+                self.add_birthday(record)
+                break
+            elif res_2 in ('2', 'no'):
+                break
+            else:
+                print("Invalid input. Please enter '1' for YES or '2' for NO.")
         self.phone_book.add_record(record)
         return f'You have created a new contact:\n{str(record)}'
     
     # добавление даты рождения
     @input_error
     def add_phone(self, record):
-        phone = input('Enter phone=> ')
-        record.add_phone(phone)
-        self.phone_book.add_record(record)
-        return f'You added a phone number {phone} to the contact:\n{str(record)}'
+        while True:
+            try:
+                phone = input('Enter phone=> ')
+                record.add_phone(phone)
+                self.phone_book.add_record(record)
+                return '\033[92mThe phone number added successfully\033[0m'  # Сообщение о успешном добавлении
+            except ValueError as e:
+                print(e)
     
-    # добавление даты рождения
+  # добавление даты рождения
     @input_error   
+    def input_year(self):
+        while True:
+            year = input('Enter the year (YYYY)=> ')
+            if year.isdigit() and 1900 <= int(year) <= 2100:
+                return year
+            else:
+                print("Invalid year. Please enter a valid year in format YYYY.")
+    def input_month(self):
+        while True:
+            month = input('Enter the month (MM)=> ')
+            if month.isdigit() and 1 <= int(month) <= 12:
+                return month.zfill(2)  # Добавляем ведущий ноль, если нужно
+            else:
+                print("Invalid month. Please enter a valid month (1-12).")
+    def input_day(self):
+        while True:
+            day = input('Enter the day (DD)=> ')
+            if day.isdigit() and 1 <= int(day) <= 31:  # Простая проверка, не учитывающая количество дней в месяце
+                return day.zfill(2)  # Добавляем ведущий ноль, если нужно
+            else:
+                print("Invalid day. Please enter a valid day (1-31).")
     def add_birthday(self, record):
-        year = input('Enter the year=> ')
-        month = input('Enter the month=> ')
-        day = input('Enter the day=> ')
+        if not record:
+            print('\033[91mThe contact does not exist\033[0m')
+            return
+        year = self.input_year()
+        month = self.input_month()
+        day = self.input_day()
         birth = f'{year}.{month}.{day}'
-        record.add_birthday(birth)
-        self.phone_book.add_record(record)
-        return f'You added the date of birthday {birth} to the contact:\n{str(record)} '
+        try:
+            record.add_birthday(birth)
+            self.phone_book.add_record(record)
+            return f'You added the date of birthday {birth} to the contact:\n{str(record)}'
+        except ValueError as e:
+            print(e)
+            print('Please enter a valid date in format YYYY.MM.DD')
+            return self.add_birthday(record)  # Повторный вызов функции при ошибке ввода
      
     # "меню" для добавления  
     @input_error
@@ -370,18 +455,20 @@ def main():
         command = input('Enter your text=>  ').lower()
         if command in ('1', 'add'):
             result = assistent_bot.add()
-        if command in ('2', 'change'):
+        elif command in ('2', 'change'):
             result = assistent_bot.change()
-        if command in ('3', 'delete'):
+        elif command in ('3', 'delete'):
             result = assistent_bot.delete()
-        if command in ('4', 'search'):
+        elif command in ('4', 'search'):
             result = assistent_bot.search() 
-        if command in ('5', 'show all', 'show'):
-            result = assistent_bot.show_all()
-        if command in ('6', 'exit'):
+        elif command in ('5', 'show all', 'show'):
+            result = assistent_bot.show_all()   
+        elif command in ('6', 'exit'):
             assistent_bot.exit()
             print('Good bye!')
             break
+        else:
+            result = 'Command not found, try again'
         print(result)
 
 
