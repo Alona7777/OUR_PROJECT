@@ -13,6 +13,7 @@ class NotesManager:
     def __init__(self):
         self.notes = []
         self.file = 'Save_Notes.bin'
+        self.read_from_file()
 
     def add_note(self, content, tags=None):
         if tags is None:
@@ -25,9 +26,12 @@ class NotesManager:
             pickle.dump(self.notes, file)
 
     def read_from_file(self):
-        with open(self.file, 'rb') as file:
-            self.notes = pickle.load(file)
-        return self.notes
+        try:
+            with open(self.file, 'rb') as file:
+                self.notes = pickle.load(file)
+            return self.notes
+        except FileNotFoundError:
+            pass
 
     def exit(self):
         self.write_to_file()
@@ -71,7 +75,7 @@ def interact_with_user():
         print("5. Delete Note")
         print("6. Exit")
 
-        choice = input("Choose your option: ")
+        choice = input("Choice your option (1 - 6): ")
 
         if choice == "1":
             content = input("Enter your text for the note: ")
