@@ -1,3 +1,6 @@
+import pickle
+
+
 class Note:
     def __init__(self, content, tags=None):
         if tags is None:
@@ -9,12 +12,26 @@ class Note:
 class NotesManager:
     def __init__(self):
         self.notes = []
+        self.file = 'Save_Notes.bin'
 
     def add_note(self, content, tags=None):
         if tags is None:
             tags = []
         note = Note(content, tags)
         self.notes.append(note)
+
+    def write_to_file(self):
+        with open(self.file, 'wb') as file:
+            pickle.dump(self.notes, file)
+
+    def read_from_file(self):
+        with open(self.file, 'rb') as file:
+            self.notes = pickle.load(file)
+        return self.notes
+
+    def exit(self):
+        self.write_to_file()
+        return True
 
     def search_notes_by_tag(self, tag):
         return [note for note in self.notes if tag in note.tags]
@@ -79,6 +96,10 @@ def interact_with_user():
             index = int(input("Enter index of the note to delete: "))
             notes_manager.delete_note_by_index(index)
         elif choice == "6":
+            if notes_manager.exit():
+                print('Notes saved and exiting successfully! Good Luck!')
+            else:
+                print('exit failed.')
             break
         else:
             print("Wrong choice!!! Try again!.")
