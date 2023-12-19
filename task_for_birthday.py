@@ -78,10 +78,10 @@ def birthday_in_given_days(value):
     for n, rec in assistent_bot.phone_book.data.items():
         name = n
         birth = rec.birthday.value.replace(year=date_today.year)
-        if birth == date_value:
+        if date_today <=  birth <= date_value:
             contact_birth.append(name)
     if len(contact_birth) == 0:
-        return 'No Birthday this day'
+        return 'No Birthday during this period'
     
     return contact_birth
     
