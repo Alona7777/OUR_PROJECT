@@ -26,29 +26,35 @@ class Field:
 class Name(Field):
     pass
 
+
 class Address(Field):
     @property
     def value(self):
         return self.__value
+    
     @value.setter
     def value(self, value: str):
         self.__value = value
 
     def __str__(self):
         return str(self.__value) 
+ 
     
 class Email(Field):
     @property
     def value(self):
         return self.__value
+    
     @value.setter
     def value(self, value: str):
         pattern = r"^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        if re.match(pattern, value) is None:
+        if (bool(re.search(pattern, value))) is False:
             raise ValueError('Invalid email')
         self.__value = value
+        
     def __str__(self):
         return str(self.__value)   
+
 
 class Birthday(Field):
     @property
@@ -219,8 +225,6 @@ def input_error(func):
 
 
 '''эта часть кода отвечает за выполнение команд'''
-
-
 class AssistantBot:
     def __init__(self):
         self.phone_book = AddressBook()
@@ -237,10 +241,6 @@ class AssistantBot:
             res_1 = input('Enter your text=>  ').lower()
             if res_1 in ('1', 'yes'):
                 self.add_phone(record)
-                # print('Do you want to add the phone number? Please enter the number:\n1.YES\n2.NO')
-                # res_2 = input('Enter your text=>  ').lower()
-                # if res_2 in ('1', 'yes'):
-                #     self.add_phone(record)
             elif res_1 in ('2', 'no'):
                 break
             else:
@@ -283,19 +283,19 @@ class AssistantBot:
         while True:
             try:
                 email = input('Enter email=> ')
-                record.add_phone(email)
+                record.add_email(email)
                 self.phone_book.add_record(record)
                 return '\033[92mThe email added successfully\033[0m'  # Сообщение о успешном добавлении
             except ValueError as e:
                 print(e)
     
+    @input_error
     def add_address(self, record: Record):
         address =  input('Enter address=> ')
         record.add_address(address)
         self.phone_book.add_record(record) 
         return '\033[92mThe address added successfully\033[0m' 
     
-    # добавление даты рождения
     @input_error
     def add_phone(self, record: Record):
         while True:
@@ -316,6 +316,8 @@ class AssistantBot:
                 return year
             else:
                 print("Invalid year. Please enter a valid year in format YYYY.")
+                
+    @input_error           
     def input_month(self):
         while True:
             month = input('Enter the month (MM)=> ')
@@ -323,6 +325,8 @@ class AssistantBot:
                 return month.zfill(2)  # Добавляем ведущий ноль, если нужно
             else:
                 print("Invalid month. Please enter a valid month (1-12).")
+                
+    @input_error            
     def input_day(self):
         while True:
             day = input('Enter the day (DD)=> ')
@@ -330,10 +334,9 @@ class AssistantBot:
                 return day.zfill(2)  # Добавляем ведущий ноль, если нужно
             else:
                 print("Invalid day. Please enter a valid day (1-31).")
+                
+    @input_error         
     def add_birthday(self, record):
-        # if not record:
-        #     print('\033[91mThe contact does not exist\033[0m')
-        #     return
         year = self.input_year()
         month = self.input_month()
         day = self.input_day()
@@ -405,9 +408,6 @@ class AssistantBot:
     
     @input_error
     def change_name(self, record: Record):
-        # if not record:
-        #     print('\033[91mThe contact was not found\033[0m')
-        #     return
         new_name = input('Enter new name=> ')
         if new_name:
             old_name = record.name.value
@@ -426,14 +426,12 @@ class AssistantBot:
             res = input('Enter your text=>  ').lower()
             if res in ('6', 'main', 'menu'):
                 return
-            elif res in ('1', 'name'):
-                return self.change_name()
             elif res in ('2', 'phone', '3', 'birthday', '4', 'email', '5', 'address', '1', 'name'):
                 name = input('Enter the name of the contact to change=> ')
                 record: Record = self.phone_book.find(name)
                 if record:
                     if res in ('1', 'name'):
-                        return self.change_name()
+                        return self.change_name(record)
                     if res in ('2', 'phone'):
                         return self.change_phone(record)
                     if res in ('3', 'birthday'):
@@ -453,73 +451,107 @@ class AssistantBot:
     def delete_phone(self, record: Record):
         phone = input('Enter phone=> ')
         result = record.remove_phone(phone)
+        self.phone_book.add_record(record)
         return result
     
     # удаление даты рождения
     @input_error   
-    def delete_birth(self, record):
+    def delete_birth(self, record: Record):
         record.birthday = None
+        self.phone_book.add_record(record)
         return 'Date of birth removed'
+    
+    @input_error
+    def delete_email(self, record: Record):
+        record.email = None
+        self.phone_book.add_record(record)
+        return 'Email removed'
+    
+    def delete_address(self, record: Record):
+        record.address = None
+        self.phone_book.add_record(record)
+        return 'Address removed'
     
     # удаление контакта
     @input_error       
-    def delete_contact(self):
-        name = input('Enter name=> ')
+    def delete_contact(self, name):
         result = self.phone_book.delete(name)
         return result
     
     # "меню" для удаления       
     @input_error
     def delete(self):
-        print('='*100)
-        print('Please enter the number\nYou can delete:\n1.CONTACT\n2.INFO IN AN EXISTING CONTACT')
-        res = input('Enter your text=>  ').lower()
-        if res in ('1', 'contact'):
-            result = self.delete_contact()
-        if res in ('2', 'info', 'info in an existing contact', 'existing contact'):
-            name = input('Enter the name of an existing contact => ')
-            record: Record = self.phone_book.find(name)
-            print('Please enter the number\nYou can delete:\n1.PHONE NUMBER\n2.DATE OF BIRTH')
-            res_1 = input('Enter your text=>  ').lower()
-            if res_1 in ('1', 'phone', 'phone number'):
-                self.delete_phone(record)
-            if res_1 in ('2', 'birth', 'date', 'date of birth'):
-                self.delete_birth(record)
-                self.phone_book.add_record(record)
-            return str(record)
-        return result
+        while True:
+            print('='*100)
+            print('Please enter the number\nYou can delete:\n1.CONTACT\n2.PHONE NUMBER\n3.DATE OF BIRTHDAY\n4.EMAIL\n5.ADDRESS\n6.RETURN TO MAIN MENU')
+            res = input('Enter your text=>  ').lower()
+            if res in ('6', 'main', 'menu'):
+                return
+            elif res in ('1', 'contact', '2', 'phone', '3', 'birth', '4', 'email', '5', 'address'):
+                name = input('Enter the name of an existing contact => ')
+                record: Record = self.phone_book.find(name)
+                if record:
+                    if res in ('1', 'contact'):
+                        return self.delete_contact(name)
+                    if res in ('2', 'phone', 'phone number'):
+                        self.delete_phone(record)
+                    if res in ('3', 'birth', 'date', 'date of birth'):
+                        self.delete_birth(record)
+                    if res in ('4', 'email'):
+                        self.delete_email(record)
+                    return str(record)
+                else:
+                    print('\033[91mThe contact does not exist\033[0m')
+                    continue  # Вернуться к началу цикла 
+            else:
+                print("The answer doesn't exist. Please enter again")   
 
 # поиск по имени и по совпадениям
     @input_error
     def search(self):
-        print('='*100)
-        print('Do you know the contact name? Please enter the number:\n1.YES\n2.NO')
-        res = input('Enter your text=>  ').lower()
-        if res == '1' or res == 'yes':
-            name = input('Enter name=> ')
-            return self.phone_book.find(name)
-        print('If you don\'t know the contact\'s name, enter at least three digits of phone number or at least three letters of the name')
-        res_1 = input('Enter your text=>  ').lower()
-        return self.phone_book.search(res_1)
+        while True:
+            print('='*100)
+            print('You can search the contact by:\n1.NAME\n2.COINCIDENCE\n3.RETURN TO MAIN MENU')
+            res = input('Enter your text=>  ').lower()
+            if res in ('3', 'main', 'menu'):
+                return
+            if res in ('1', 'name'):
+                name = input('Enter name=> ')
+                contact = self.phone_book.find(name)
+                if contact is None:
+                    print('\033[91mThe contact does not exist\033[0m')
+                    continue  # Вернуться к началу цикла
+                return contact    
+            if res in ('2'):
+                res_1 = input('Enter your text=>  ').lower()
+                return self.phone_book.search(res_1)
+            else:
+                print("The answer doesn't exist. Please enter again") 
 
     # работа через интератор не сделана правильно
     @input_error
     def show_all(self):
-        print('='*100)
-        print('Do you want to display all contacts? Please enter the number:\n1.YES\n2.NO')
-        res = input('Enter your text=>  ').lower()
-        if res == '1' or res == 'yes':
-            if self.phone_book:
-                phones = f'Contacts:\n'
-                for name, record in self.phone_book.data.items():
-                    phones += f'{str(record)}\n'
-                return phones
+        while True:
+            print('='*100)
+            print('You can to display:\n1.ALL CONTACTS\n2.BY INTEGRATION\n3.RETURN TO MAIN MENU')
+            res = input('Enter your text=>  ').lower()
+            if res == '1' or res == 'yes':
+                if self.phone_book:
+                    phones = f'Contacts:\n'
+                    for name, record in self.phone_book.data.items():
+                        phones += f'{str(record)}\n'
+                    return phones
+                else:
+                    return 'No contacts'
+            if res in ('2'):
+                print('How many contacts to display?')
+                res_1 = input('Enter your text=>  ')
+                if res_1.isdigit():
+                    return self.phone_book.iterator(res_1)
+            if res in ('3', 'main', 'menu'):
+                return
             else:
-                return 'No contacts'
-        print('How many contacts to display?')
-        res_1 = input('Enter your text=>  ')
-        if res_1.isdigit():
-            return self.phone_book.iterator(res_1)
+                print("The answer doesn't exist. Please enter again")
         
         # выход из програмы и сохранение файла!
     def exit(self):
@@ -527,8 +559,6 @@ class AssistantBot:
         return 
 
 # эта часть отвечает за команды телефонной книги, нет адреса и email  
-
-
 def main():
     assistent_bot = AssistantBot()
     print('Hello!')
