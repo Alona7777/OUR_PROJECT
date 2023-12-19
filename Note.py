@@ -23,7 +23,7 @@ class NotesManager:
         if not self.notes:
             print('List empty')
         for i, note in enumerate(self.notes, 1):
-            print(f"{i}. Content: {note.content}. Tags:{note.tags}")
+            print(f"{i}. Content:{note.content}, Tags:{note.tags}")
 
     def edit_note_content(self, index, new_content):
         if 1 <= index <= len(self.notes):
