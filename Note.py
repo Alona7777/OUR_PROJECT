@@ -46,11 +46,13 @@ class NotesManager:
         for i, note in enumerate(self.notes, 1):
             print(f"{i}. Content:{note.content}, Tags:{note.tags}")
 
-    def edit_note_content(self, index, new_content):
-        if 1 <= index <= len(self.notes):
-            self.notes[index - 1].content = new_content
-        else:
-            print("Invalid note index.")
+    def edit_note_content(self, tag, new_content):
+        for note in self.notes:
+            if tag not in note.tags:
+                print("Invalid note index.")
+            if tag in note.tags:
+                note.content = new_content
+                print("Note update successfully.")
 
     def search_and_sort_notes(self, keyword):
         found_notes = [note for note in self.notes if keyword in note.tags]
@@ -58,11 +60,42 @@ class NotesManager:
         return sorted_notes
 
     def delete_note_by_index(self, index):
-        if 1 <= index <= len(self.notes):
-            del self.notes[index - 1]
+        initial_len = len(self.notes)
+        self.notes = [note for note in self.notes if index not in note.tags]
+        if len(self.notes) == initial_len:
+            print(f"No note found with tag '{index}'.")
         else:
-            print("Invalid note index.")
+            print(f"Note with tag '{index}' deleted successfully.")
 
+    def note_add_menu(self):
+        content = input("Enter your text for the note: ")
+        tags = input("Enter tags separated by commas (or press Enter if no tags): ").split(',')
+        self.add_note(content, tags)
+        self.write_to_file()
+
+    def note_charge_menu(self):
+        index = int(input("Enter index of the note to edit: "))
+        new_content = input("Enter new text for the note: ")
+        self.edit_note_content(index, new_content)
+        self.write_to_file()
+
+    def note_delete_menu(self):
+        index = int(input("Enter index of the note to delete: "))
+        self.delete_note_by_index(index)
+        self.write_to_file()
+
+    def note_search_menu(self):
+        tag_to_search = input("Enter tag for search and sort: ")
+        sorted_notes = self.search_and_sort_notes(tag_to_search)
+        if sorted_notes:
+            print(f"Found and Sorted Notes with Tag '{tag_to_search}':")
+            for note in sorted_notes:
+                print(f"Content: {note.content}, Tags: {note.tags}")
+        else:
+            print('Nothing to sort!')
+
+    def note_show_menu(self):
+        self.display_all_notes()
 
 def interact_with_user():
     notes_manager = NotesManager()
