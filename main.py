@@ -33,7 +33,7 @@ def start_menu():
 
     commands_start = {
         'ADD': [function_stub, 2, 1],
-        'CHARGE': [function_stub, 3, 1],
+        'EDIT': [function_stub, 3, 1],
         'DELETE': [function_stub, 4, 1],
         'SEARCH': [assistent_bot.search, 1, 1],
         'SHOW ALL': [assistent_bot.show_all, 1, 1],
@@ -46,14 +46,14 @@ def start_menu():
         'CONTACT': [assistent_bot.add_contact, 1, 1],
         'PHONE': [assistent_bot.add_phone_menu, 1, 1],
         'BIRTHDAY': [assistent_bot.add_birthday_menu, 1, 1],
-        'EMAIL': [assistent_bot.add_email, 1, 1],
-        'ADDRESS': [assistent_bot.add_address, 1, 1],
+        'EMAIL': [assistent_bot.add_email_menu, 1, 1],
+        'ADDRESS': [assistent_bot.add_address_menu, 1, 1],
         'NOTE': [notes_manager.note_add_menu, 5, 1],
         'RETURN TO MAIN MENU': [function_stub, 1, 0],
         'EXIT': [f_exit, 0, 0],
     }
 
-    commands_change = {
+    commands_edit = {
         'NAME': [assistent_bot.edit_name, 1, 1],
         'PHONE': [assistent_bot.edit_phone_menu, 1, 1],
         'BIRTHDAY': [assistent_bot.edit_birthday_menu, 1, 1],
@@ -115,7 +115,7 @@ def start_menu():
             commands_menu = commands_add
             print(colored('We will add more? Please choose: |CONTACT|PHONE|BIRTHDAY|EMAIL|NOTE|', text_colors))
         elif current_menu_number == 3:
-            commands_menu = commands_change
+            commands_menu = commands_edit
             print(colored('What do you want to change? Please choose: |PHONE|BIRTHDAY|EMAIL|NOTE|', text_colors))
         elif current_menu_number == 4:
             commands_menu = commands_del
