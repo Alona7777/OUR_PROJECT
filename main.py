@@ -5,6 +5,7 @@ from contact_book import AssistantBot
 from Note import NotesManager
 from weather import anecdotes_ua_menu, anecdotes_en_menu, weather_menu
 from file_sorter import sorteds_menu
+from task_for_birthday import birthdays_for_date_menu, get_birthdays_per_week_menu, birthday_in_given_days_menu
 
 
 def start_menu():
@@ -89,6 +90,7 @@ def start_menu():
         'FILE SORTING': [sorteds_menu, 6, 1],
         'WEATHER': [weather_menu, 6, 1],
         'ANECDOTES': [function_stub, 7, 1],
+        'BIRTHDAY': [function_stub, 8, 1],
         'RETURN TO MAIN MENU': [function_stub, 1, 0],
         'EXIT': [f_exit, 2, 1],
     }
@@ -96,6 +98,15 @@ def start_menu():
     commands_anecdotes = {
         'Українскою мовою': [anecdotes_ua_menu, 6, 1],
         'English language': [anecdotes_en_menu, 6, 1],
+        'RETURN TO MAIN MENU' : [function_stub, 1, 0],
+        'EXIT': [f_exit, 2, 1],
+    }
+
+    commands_birthdays = {
+        'FOR THIS DAY': [birthdays_for_date_menu, 8, 1],
+        'THIS WEEK': [get_birthdays_per_week_menu, 8, 1],
+        'FOR A FEW DAYS' : [birthday_in_given_days_menu, 8, 1],
+        'RETURN TO MAIN MENU' : [function_stub, 8, 0],
         'EXIT': [f_exit, 2, 1],
     }
     # Функция для получения ввода пользователя
@@ -131,6 +142,9 @@ def start_menu():
         elif current_menu_number == 7:
             commands_menu = commands_anecdotes
             print(colored('Choose language. Please choose: |Українскою мовою|English language|', text_colors))
+        elif current_menu_number == 8:
+            commands_menu = commands_birthdays
+            print(colored('Choose language. Please choose: |FOR THIS DAY|THIS WEEK|FOR A FEW DAYS|', text_colors))
 
         user_input = get_user_input(commands_menu)
 
