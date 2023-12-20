@@ -53,11 +53,11 @@ def start_menu():
     }
 
     commands_change = {
-        'NAME': [assistent_bot.change_name, 1, 1],
-        'PHONE': [assistent_bot.charge_phone_mune, 1, 1],
-        'BIRTHDAY': [assistent_bot.charge_birthday_mune, 1, 1],
-        'EMAIL': [assistent_bot.change_email, 1, 1],
-        'ADDRESS': [assistent_bot.change_address, 1, 1],
+        'NAME': [assistent_bot.edit_name, 1, 1],
+        'PHONE': [assistent_bot.edit_phone_menu, 1, 1],
+        'BIRTHDAY': [assistent_bot.edit_birthday_menu, 1, 1],
+        'EMAIL': [assistent_bot.edit_email, 1, 1],
+        'ADDRESS': [assistent_bot.edit_address, 1, 1],
         'NOTE': [function_stub, 7, 1],
         'BACK': [function_stub, 1, 0],
         'RETURN TO MAIN MENU': [function_stub, 1, 0],

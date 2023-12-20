@@ -1,7 +1,7 @@
 
 from collections import UserDict, defaultdict
 from datetime import date, datetime, timedelta
-from test_main import AssistantBot, AddressBook, Record, Name, Phone, Birthday
+from contact_book import AssistantBot, AddressBook, Record, Name, Phone, Birthday
 
 
 # список имен у кого день рождения на указанною дату
