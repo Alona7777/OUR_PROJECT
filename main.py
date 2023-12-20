@@ -6,7 +6,7 @@ import os
 import questionary
 from termcolor import colored
 import time
-from contact_book import AssistantBot
+from contact_book import AssistantBot, Record, Name, Phone, Birthday
 
 
 def start_menu():
