@@ -1,11 +1,12 @@
+
 from collections import UserDict, defaultdict
 from datetime import date, datetime, timedelta
-from contact_book import AssistantBot, AddressBook, Record, Name, Phone, Birthday
+from test_main import AssistantBot, AddressBook, Record, Name, Phone, Birthday
 
 
 # список имен у кого день рождения на указанною дату
-def birthdays_for_date(value):
-    date = datetime.strptime(value, '%Y.%m.%d').date()
+def birthdays_for_date(day):
+    date = datetime.strptime(day, '%Y.%m.%d').date()
     assistent_bot = AssistantBot()
     date_today = date.today()             
     contact_birth = []
@@ -78,13 +79,14 @@ def birthday_in_given_days(value):
     for n, rec in assistent_bot.phone_book.data.items():
         name = n
         birth = rec.birthday.value.replace(year=date_today.year)
-        if birth == date_value:
+        if date_today <=  birth <= date_value:
             contact_birth.append(name)
     if len(contact_birth) == 0:
-        return 'No Birthday this day'
+        return 'No Birthday during this period'
     
     return contact_birth
     
+
 
 if __name__ == "__main__":
 
