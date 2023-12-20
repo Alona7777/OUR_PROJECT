@@ -79,13 +79,48 @@ def birthday_in_given_days(value):
     for n, rec in assistent_bot.phone_book.data.items():
         name = n
         birth = rec.birthday.value.replace(year=date_today.year)
-        if date_today <=  birth <= date_value:
+        if date_today <= birth <= date_value:
             contact_birth.append(name)
     if len(contact_birth) == 0:
         return 'No Birthday during this period'
     
     return contact_birth
-    
+
+
+# Displaying birthdays for the current date
+def birthdays_for_date_menu():
+    today_data = datetime.today().date()
+    today_data_str = today_data.strftime('%Y.%m.%d')
+    birth = birthdays_for_date(today_data_str)
+    print(birth)
+
+
+# List of birthdays this week
+def get_birthdays_per_week_menu():
+    birthdays = get_birthdays_per_week()
+    print(birthdays)
+
+
+# Displaying birthdays for a number of days
+def birthday_in_given_days_menu():
+    while True:
+        print(f'\033[38;2;10;235;190mEnter the required number of days or press ENTER to skip.')
+        item_number = input('Enter the number=> \033[0m')
+        if item_number:
+            if item_number.isdigit() :
+                # Введено число
+                item_number = int(item_number)
+                days_birthd = birthday_in_given_days(item_number)
+                print(days_birthd)
+                return
+            elif item_number.isalpha():
+                # Введены буквы
+                print(f'\033[91mYou entered letters: {item_number}\033[0m')
+            else:
+                # Введены буквы
+                print(f'\033[91mYou entered lettersYou entered letters.: {item_number}\033[0m')
+
+        return
 
 
 if __name__ == "__main__":
@@ -96,5 +131,5 @@ if __name__ == "__main__":
     birthdays = get_birthdays_per_week()
     print(birthdays)
     
-    b = birthday_in_given_days(1)
+    b = birthday_in_given_days(500)
     print(b)
