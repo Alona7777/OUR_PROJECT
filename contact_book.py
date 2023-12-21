@@ -1,9 +1,11 @@
-from collections import UserDict
+from collections import UserDict, defaultdict
 import cmd
 from datetime import date, datetime, timedelta
 import pickle
 import os
 import re
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import WordCompleter
 
 
 class Field:
@@ -237,15 +239,16 @@ class AssistantBot:
         if os.path.isfile(self.phone_book.file):      # запуск файла с сохранеными контактами!!!
             self.phone_book.read_from_file()
     
-    # отдельная функция по поиску рекорд, чтобы избежать ошибку с несущестующим контактом
-    @input_error
+    # отдельная функция по поиску рекорд, чтобы избежать ошибку с несущестующим контактом 
+    @input_error    
     def find_record(self):
         print('=' * 100)
-        name = input('Enter the name of an existing contact=> ')
+        completer = WordCompleter(list(self.phone_book.keys()), ignore_case = True)
+        name = prompt('Enter the name of an existing contact=> ', completer = completer)
         record: Record = self.phone_book.find(name)
         if record:
            return record
-        # return f'\033[91mThe contact does not exist\033[0m'   
+
     
     # добавление нового контакта
     @input_error
@@ -611,8 +614,7 @@ class AssistantBot:
     def exit(self):
         self.phone_book.write_to_file()
         return
-
-
+    
 
 if __name__ == "__main__":
     pass
