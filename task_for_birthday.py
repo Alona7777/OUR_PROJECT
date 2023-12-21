@@ -1,7 +1,11 @@
 from collections import UserDict, defaultdict
 from datetime import date, datetime, timedelta
 from contact_book import AssistantBot, AddressBook, Record, Name, Phone, Birthday
+from rich.console import Console
+from rich.table import Table
 
+
+console = Console()
 
 # список имен у кого день рождения на указанною дату
 def birthdays_for_date(day):
@@ -14,30 +18,43 @@ def birthdays_for_date(day):
         birth = rec.birthday.value.replace(year=date_today.year)
         if birth == date:
             contact_birth.append(name)
+        return contact_birth
     if len(contact_birth) == 0:
-        return 'No Birthday this day'
-    
-    return contact_birth
+        print(f'\033[38;2;10;235;190mNo Birthday this day.\033[0m')
+        return 
+    # return contact_birth
+
+# Displaying birthdays for the current date
+def birthdays_for_date_menu():
+    table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 50)
+    table.add_column("Name", style="red", justify="center")
+    today_data = datetime.today().date()
+    today_data_str = today_data.strftime('%Y.%m.%d')
+    birth = birthdays_for_date(today_data_str)
+    s = ''
+    for el in birth:
+        s += el + ' '
+    table.add_row(s)
+    console.print(table)
 
 # список имен у кого дни рождения на неделю от сегоднешней даты
 # {'Monday': ['Masha'], 'Tuesday': ['Pavel'], 'Wednesday': ['Stiv']}
 def get_birthdays_per_week():
     assistent_bot = AssistantBot()
     date_today = date.today()          
-    day_week_today = date_today.isoweekday() 
     birthday_per_week = []
     for n, rec in assistent_bot.phone_book.data.items():
         name = n
         birth = rec.birthday.value.replace(year=date_today.year)
         if birth < date_today - timedelta(days=1):
             birth = birth.replace(year=date_today.year+1)
-        
         day_week = birth.isoweekday()
         end_date = date_today + timedelta(days=7)
         if date_today <= birth <= end_date:
             birthday_per_week.append([name, birth, day_week])
     if len(birthday_per_week) == 0:
-        return 'No Birthday this week'
+        print(f'\033[38;2;10;235;190mNo Birthday this week.\033[0m')
+        return 
     users = defaultdict(list)
     for item in birthday_per_week:
         if item[2] == 1 or item[2] == 6 or item[2] == 7:
@@ -56,6 +73,17 @@ def get_birthdays_per_week():
             users['Sunday'].append(item[0])
     return {key: value for key, value in users.items() if value} 
 
+# List of birthdays this week
+def get_birthdays_per_week_menu():
+    table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 50)
+    table.add_column("Day of the week", style="red", justify="center")
+    table.add_column("Names", style="bold blue", justify="center")
+    birthdays = get_birthdays_per_week()
+    for k, v in birthdays.items():
+        v_1 = ', '.join(p for p in v)
+        table.add_row(k, v_1)
+    console.print(table)
+    print(birthdays)
 
 # виводити список контактів, у яких день народження через задану кількість днів від поточної дати
 def birthday_in_given_days(value):
@@ -66,35 +94,20 @@ def birthday_in_given_days(value):
     for n, rec in assistent_bot.phone_book.data.items():
         name = n
         birth = rec.birthday.value.replace(year=date_today.year)
-
         if date_today <=  birth <= date_value:
             contact_birth.append(f'{name}: {rec.birthday.value}')
 
-        if date_today <= birth <= date_value:
-            contact_birth.append(name)
-
     if len(contact_birth) == 0:
-        return 'No Birthday during this period'
+        print(f'\033[38;2;10;235;190mNo Birthday during this period.\033[0m')
+        return 
     
     return contact_birth
 
-
-# Displaying birthdays for the current date
-def birthdays_for_date_menu():
-    today_data = datetime.today().date()
-    today_data_str = today_data.strftime('%Y.%m.%d')
-    birth = birthdays_for_date(today_data_str)
-    print(birth)
-
-
-# List of birthdays this week
-def get_birthdays_per_week_menu():
-    birthdays = get_birthdays_per_week()
-    print(birthdays)
-
-
 # Displaying birthdays for a number of days
 def birthday_in_given_days_menu():
+    table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 50)
+    table.add_column("Name", style="red", justify="center")
+    table.add_column("Date of birth", style="bold blue", justify="center")
     while True:
         print(f'\033[38;2;10;235;190mEnter the required number of days or press ENTER to skip.')
         item_number = input('Enter the number=> \033[0m')
@@ -103,7 +116,10 @@ def birthday_in_given_days_menu():
                 # Введено число
                 item_number = int(item_number)
                 days_birthd = birthday_in_given_days(item_number)
-                print(days_birthd)
+                for elem in days_birthd:
+                    item = elem.split(':')
+                    table.add_row(item[0], item[1])
+                console.print(table)
                 return
             elif item_number.isalpha():
                 # Введены буквы
@@ -116,16 +132,7 @@ def birthday_in_given_days_menu():
 
 
 if __name__ == "__main__":
+    pass
 
-    birth = birthdays_for_date('2023.12.19')
-    print(birth)
 
-    birthdays = get_birthdays_per_week()
-    print(birthdays)
-    
-
-    b = birthday_in_given_days(100)
-
-    b = birthday_in_given_days(500)
-
-    print(b)
+   
