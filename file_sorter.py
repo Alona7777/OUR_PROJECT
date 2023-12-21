@@ -153,31 +153,31 @@ def main(folder: Path):
     #     handle_media(file, folder / 'images' / 'JPEG')
 
     count_star = 0
-    for file in tqdm(JPEG_IMAGES, desc = '\033[38;2;10;235;190mОбробка изображений JPEG',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(JPEG_IMAGES, desc = '\033[38;2;10;235;190mImage processing JPEG',
+                     unit = " file\033[0m", ncols = 100):
         handle_media(file, folder / 'images' / 'JPEG')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(JPG_IMAGES, desc = '\033[38;2;10;235;190mОбробка зображення JPG',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(JPG_IMAGES, desc = '\033[38;2;10;235;190mImage processing JPG',
+                     unit = " file\033[0m", ncols = 100):
     # for file in JPG_IMAGES:
         handle_media(file, folder / 'images' / 'JPG')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(PNG_IMAGES, desc = '\033[38;2;10;235;190mОбробка зображення PNG',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(PNG_IMAGES, desc = '\033[38;2;10;235;190mImage processing PNG',
+                     unit = " file\033[0m", ncols = 100):
     # for file in PNG_IMAGES:
         handle_media(file, folder / 'images' / 'PNG')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(SVG_IMAGES, desc = '\033[38;2;10;235;190mОбробка зображення SVG',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(SVG_IMAGES, desc = '\033[38;2;10;235;190mImage processing SVG',
+                     unit = " file\033[0m", ncols = 100):
     # for file in SVG_IMAGES:
         handle_media(file, folder / 'images' / 'SVG')
         count_star += 1
@@ -185,32 +185,32 @@ def main(folder: Path):
 
     # Проходимо по всіх знайдених списках для відео
     count_star = 0
-    for file in tqdm(AVI_VIDEO, desc = '\033[38;2;10;235;190mОбробка відео AVI',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(AVI_VIDEO, desc = '\033[38;2;10;235;190mVideo processing AVI',
+                     unit = " file\033[0m", ncols = 100):
     # for file in AVI_VIDEO:
         handle_media(file, folder / 'video' / 'AVI_VIDEO')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(MP4_VIDEO, desc = '\033[38;2;10;235;190mОбробка відео MP4',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(MP4_VIDEO, desc = '\033[38;2;10;235;190mVideo processing MP4',
+                     unit = " file\033[0m", ncols = 100):
     # for file in MP4_VIDEO:
         handle_media(file, folder / 'video' / 'MP4_VIDEO')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(MOV_VIDEO, desc = '\033[38;2;10;235;190mОбробка відео MOV',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(MOV_VIDEO, desc = '\033[38;2;10;235;190mVideo processing MOV',
+                     unit = " file\033[0m", ncols = 100):
     # for file in MOV_VIDEO:
         handle_media(file, folder / 'video' / 'MOV_VIDEO')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(MKV_VIDEO, desc = '\033[38;2;10;235;190mОбробка відео MKV',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(MKV_VIDEO, desc = '\033[38;2;10;235;190mVideo processing MKV',
+                     unit = " file\033[0m", ncols = 100):
     # for file in MKV_VIDEO:
         handle_media(file, folder / 'video' / 'MKV_VIDEO')
         count_star += 1
@@ -218,32 +218,32 @@ def main(folder: Path):
 
     # Проходимо за всіма знайденими списками для audio
     count_star = 0
-    for file in tqdm(MP3_AUDIO, desc = '\033[38;2;10;235;190mОбробка аудіо MP3',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(MP3_AUDIO, desc = '\033[38;2;10;235;190mAudio processing MP3',
+                     unit = " file\033[0m", ncols = 100):
     # for file in MP3_AUDIO:
         handle_media(file, folder / 'audio' / 'MP3_AUDIO')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(OGG_AUDIO, desc = '\033[38;2;10;235;190mОбробка аудіо OGG',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(OGG_AUDIO, desc = '\033[38;2;10;235;190mAudio processing OGG',
+                     unit = " file\033[0m", ncols = 100):
     # for file in OGG_AUDIO:
         handle_media(file, folder / 'audio' / 'OGG_AUDIO')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(WAV_AUDIO, desc = '\033[38;2;10;235;190mОбробка аудіо WAV',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(WAV_AUDIO, desc = '\033[38;2;10;235;190mAudio processing WAV',
+                     unit = " file\033[0m", ncols = 100):
     # for file in WAV_AUDIO :
         handle_media(file, folder / 'audio' / 'WAV_AUDIO')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(AMR_AUDIO, desc = '\033[38;2;10;235;190mОбробка аудіо AMR',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(AMR_AUDIO, desc = '\033[38;2;10;235;190mAudio processing AMR',
+                     unit = " file\033[0m", ncols = 100):
     # for file in AMR_AUDIO :
         handle_media(file, folder / 'audio' / 'AMR_AUDIO')
         count_star += 1
@@ -251,48 +251,48 @@ def main(folder: Path):
 
     # Проходимо по всіх знайдених списках для documents
     count_star = 0
-    for file in tqdm(DOC_DOCUMENTS, desc = '\033[38;2;10;235;190mОбробка документів DOC',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(DOC_DOCUMENTS, desc = '\033[38;2;10;235;190mProcessing of documents DOC',
+                     unit = " file\033[0m", ncols = 100):
     # for file in DOC_DOCUMENTS:
         handle_media(file, folder / 'documents' / 'DOC_DOCUMENTS')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(DOCX_DOCUMENTS, desc = '\033[38;2;10;235;190mОбробка документів DOCX',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(DOCX_DOCUMENTS, desc = '\033[38;2;10;235;190mProcessing of documents DOCX',
+                     unit = " file\033[0m", ncols = 100):
     # for file in DOCX_DOCUMENTS:
         handle_media(file, folder / 'documents' / 'DOCX_DOCUMENTS')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(TXT_DOCUMENTS, desc = '\033[38;2;10;235;190mОбробка документів TXT',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(TXT_DOCUMENTS, desc = '\033[38;2;10;235;190mProcessing of documents TXT',
+                     unit = " file\033[0m", ncols = 100):
     # for file in TXT_DOCUMENTS:
         handle_media(file, folder / 'documents' / 'TXT_DOCUMENTS')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(PDF_DOCUMENTS, desc = '\033[38;2;10;235;190mОбробка документів PDF',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(PDF_DOCUMENTS, desc = '\033[38;2;10;235;190mProcessing of documents PDF',
+                     unit = " file\033[0m", ncols = 100):
     # for file in PDF_DOCUMENTS:
         handle_media(file, folder / 'documents' / 'PDF_DOCUMENTS')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(XLSX_DOCUMENTS, desc = '\033[38;2;10;235;190mОбробка документів XLSX',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(XLSX_DOCUMENTS, desc = '\033[38;2;10;235;190mProcessing of documents XLSX',
+                     unit = " file\033[0m", ncols = 100):
     # for file in XLSX_DOCUMENTS:
         handle_media(file, folder / 'documents' / 'XLSX_DOCUMENTS')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for file in tqdm(PPTX_DOCUMENTS, desc = '\033[38;2;10;235;190mОбробка документів PPTX',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(PPTX_DOCUMENTS, desc = '\033[38;2;10;235;190mProcessing of documents PPTX',
+                     unit = " file\033[0m", ncols = 100):
     # for file in PPTX_DOCUMENTS:
         handle_media(file, folder / 'documents' / 'PPTX_DOCUMENTS')
         count_star += 1
@@ -301,8 +301,8 @@ def main(folder: Path):
 
     # Проходимо за всіма знайденими списками для MY_OTHER
     count_star = 0
-    for file in tqdm(MY_OTHER, desc = '\033[38;2;10;235;190mОбробка інших файлів',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(MY_OTHER, desc = '\033[38;2;10;235;190mProcessing other files',
+                     unit = " file\033[0m", ncols = 100):
     # for file in MY_OTHER:
         handle_media(file, folder / 'MY_OTHER')
         count_star += 1
@@ -310,16 +310,16 @@ def main(folder: Path):
 
     # Проходимо по всіх знайдених списках для ARCHIVES
     count_star = 0
-    for file in tqdm(ARCHIVES, desc = '\033[38;2;10;235;190mОбробка архівів',
-                     unit = " файл\033[0m", ncols = 100):
+    for file in tqdm(ARCHIVES, desc = '\033[38;2;10;235;190mProcessing of archives',
+                     unit = " file\033[0m", ncols = 100):
     # for file in ARCHIVES:
         handle_archive(file, folder / 'ARCHIVES')
         count_star += 1
         time.sleep(0.05)
 
     count_star = 0
-    for folder in tqdm(FOLDERS[::-1], desc = '\033[38;2;10;235;190mВидалення пустих папок',
-                     unit = " файл\033[0m", ncols = 100):
+    for folder in tqdm(FOLDERS[::-1], desc = '\033[38;2;10;235;190mDeleting empty folders',
+                     unit = " file\033[0m", ncols = 100):
         count_star += 1
         time.sleep(0.05)
     # for folder in FOLDERS[::-1]:
@@ -329,12 +329,13 @@ def main(folder: Path):
         try:
             folder.rmdir()
         except OSError:
-            print(f'Error during remove folder {folder}')
+            print(f'\033[91mError during remove folder {folder}\033[0m')
 
 
 def sorteds_menu():
-    print(f'\033[38;2;10;235;190mCopy the files to be sorted into a folder in this project and press Enter to sort '
-          f'them.\033[0m')
+    print(f'\033[38;2;10;235;190mCopy the files to be sorted into a folder'
+          f' \033[91mtrash_folder'
+          f'\033[38;2;10;235;190m in this project and press Enter to sort them.\033[0m')
     user_input = input('\033[38;2;10;235;190mPress Enter to sort them.\033[0m')
 
     folder_process = Path('trash_folder')
