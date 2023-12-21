@@ -113,7 +113,7 @@ def start_menu():
 
     def get_user_input(commands_menu):
         print(colored('=' * 100, text_colors))
-        result = questionary.select('Select a team:', choices=commands_menu.keys()).ask()
+        result = questionary.select('Choose an action:', choices=commands_menu.keys()).ask()
         return result
 
     # Основной цикл ввода
@@ -122,10 +122,10 @@ def start_menu():
         print(colored('=' * 100, text_colors))
         if current_menu_number == 1:
             commands_menu = commands_start
-            print(colored('How can I help you? Please choose: |ADD|EDIT|DELETE|SEARCH|SHOW ALL|', text_colors))
+            print(colored('How can I assist you? Please select an option: |ADD|EDIT|DELETE|SEARCH|SHOW ALL|', text_colors))
         elif current_menu_number == 2:
             commands_menu = commands_add
-            print(colored('We will add more? Please choose: |CONTACT|PHONE|BIRTHDAY|EMAIL|NOTE|', text_colors))
+            print(colored('What would you like to add? Please choose: |CONTACT|PHONE|BIRTHDAY|EMAIL|ADDRESS|NOTE|', text_colors))
         elif current_menu_number == 3:
             commands_menu = commands_edit
             print(colored('What do you want to change? Please choose: |PHONE|BIRTHDAY|EMAIL|NOTE|', text_colors))
@@ -135,11 +135,11 @@ def start_menu():
                           text_colors))
         elif current_menu_number == 5:
             commands_menu = commands_note
-            print(colored('How can I help you? Please choose: |ADD NOTE|EDIT NOTE|DELETE NOTE|SEARCH NOTE|'
+            print(colored('How can I assist you? Please select an option: |ADD NOTE|EDIT NOTE|DELETE NOTE|SEARCH NOTE|'
                           'SHOW ALL NOTE|', text_colors))
         elif current_menu_number == 6:
             commands_menu = commands_goodies
-            print(colored('How can I help you? Please choose: |FILE SORTING|WEATHER|ANECDOTES|', text_colors))
+            print(colored('How can I assist you? Please select an option: |FILE SORTING|WEATHER|ANECDOTES|', text_colors))
         elif current_menu_number == 7:
             commands_menu = commands_anecdotes
             print(colored('Choose language. Please choose: |Українською мовою|English language|', text_colors))
