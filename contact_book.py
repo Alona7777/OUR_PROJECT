@@ -74,6 +74,7 @@ class Birthday(Field):
 
     def __str__(self):
         return self.__value.strftime('%Y.%m.%d')
+    
 
 
 class Phone(Field):
@@ -84,11 +85,11 @@ class Phone(Field):
     @value.setter
     def value(self, value):
         if len(value) != 10 or not value.isdigit():
-            raise ValueError('\033[91mThe phone number should be digits only and have 10 symbols\033[0m')
+            raise ValueError('\033[91mThe phone number should be digits only and have 10 symbols.\033[0m')
         self.__value = value
 
     def __str__(self):
-        return self.__value.strftime('%Y.%m.%d')
+        return(str(self.__value))
 
 
 class Record:
@@ -116,8 +117,8 @@ class Record:
         for item in self.phones:
             if item.value == phone:
                 self.phones.remove(item)
-                return f'The phone number: {phone} has been deleted'
-        return f'The phone number {phone} not found'
+                return f'The phone number: {phone} has been deleted.'
+        return f'The phone number {phone} not found.'
 
     def edit_phone(self, old_phone: str, new_phone: str):
         for phone in self.phones:
@@ -147,10 +148,12 @@ class Record:
         return day_to_birthday
 
     def __str__(self):
+        
+        return f'{self.name.value}, {"; ".join(p.value for p in self.phones)}, {self.birthday}, {self.email}, {self.address}, {self.days_to_birthday()}'
 
-        return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; " \
-               f"|| Birthday: {self.birthday}  || Email: {self.email}  || Address: {self.address}" \
-               f"|| Days to birthday: {self.days_to_birthday()}||"
+        # return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; " \
+        #        f"|| Birthday: {self.birthday}  || Email: {self.email}  || Address: {self.address}" \
+        #        f"|| Days to birthday: {self.days_to_birthday()}||"
 
 
 class AddressBook(UserDict):
@@ -169,28 +172,25 @@ class AddressBook(UserDict):
 
     def search(self, value: str):
         if len(value) < 3:
-            return 'You need at least 3 letters to search by name or 3 didgit to search by phone number.'
-        search_contact = []
+            return '\033[91mYou need at least 3 letters to search by name or 3 didgit to search by phone number.\033[0m'
         result = ''
         for name, rec in self.data.items():
             if value.lower() in name.lower():
-                result += f'{name}: {str(rec)}\n'
-                search_contact.append(result)
+                result += f'{str(rec)}\n'
             for item in rec.phones:
                 if value in item.value:
-                    result += f'{name}: {str(rec)}\n'
-                    search_contact.append(result)
+                    result += f'{str(rec)}'
         if len(result) != 0:
             return result
         else:
-            return 'No matches found'
+            return None
 
     def delete(self, name: str):
         if name in self.data:
             self.data.pop(name)
-            return f'The contact {name} has been deleted'
+            return f'The contact {name} has been deleted.'
         else:
-            return f'The contact {name} not found'
+            return f'The contact {name} not found.'
 
     def iterator(self, item_number):
         counter = 0
@@ -320,7 +320,7 @@ class AssistantBot:
         while True:
             record = self.find_record()
             if not record:
-                print('\033[91mThe contact was not found\033[0m')
+                print('\033[91mThe contact was not found.\033[0m')
                 return
             self.add_phone(record)
             self.console.print(self.table_print(record))
@@ -331,7 +331,7 @@ class AssistantBot:
         while True:
             try:
                 print(f'\033[38;2;10;235;190mEnter the date of birth or press ENTER to skip.\033[0m')
-                birth = input('Enter date of birt=> ')
+                birth = input('Enter date of birth. Correct format: YYYY.MM.DD=> ')
                 if birth:
                     record.add_birthday(birth)
                     self.phone_book.add_record(record)
@@ -347,14 +347,14 @@ class AssistantBot:
         while True:
             record = self.find_record()
             if not record:
-                print('\033[91mThe contact was not found\033[0m')
+                print('\033[91mThe contact was not found.\033[0m')
                 return
             elif record.birthday == None:
                 self.add_birthday(record)
                 self.console.print(self.table_print(record))
                 return
             else:
-                print('\033[91mThis contact has date of birth\033[0m')
+                print('\033[91mThis contact has date of birth.\033[0m')
                 return
 
     # добаваление email  
@@ -379,14 +379,14 @@ class AssistantBot:
         while True:
             record = self.find_record()
             if not record:
-                print('\033[91mThe contact was not found\033[0m')
+                print('\033[91mThe contact was not found.\033[0m')
                 return
             elif record.email == None:
                 self.add_email(record)
                 self.console.print(self.table_print(record))
                 return
             else:
-                print('\033[91mThis contact has email\033[0m')
+                print('\033[91mThis contact has email.\033[0m')
                 return
 
     # добавление адреса   
@@ -414,7 +414,7 @@ class AssistantBot:
                 self.console.print(self.table_print(record))
                 return
             else:
-                print('\033[91mThis contact has address\033[0m')
+                print('\033[91mThis contact has address.\033[0m')
                 return
 
     # изменение телефона
@@ -436,7 +436,7 @@ class AssistantBot:
         while True:
             record = self.find_record()
             if not record:
-                print('\033[91mThe contact was not found\033[0m')
+                print('\033[91mThe contact was not found.\033[0m')
                 return
             print(f'\033[92m{str(record)}\033[0m')
             self.edit_phone(record)
@@ -448,7 +448,7 @@ class AssistantBot:
         while True:
             record = self.find_record()
             if not record:
-                print('\033[91mThe contact was not found\033[0m')
+                print('\033[91mThe contact was not found.\033[0m')
                 return
             print(f'\033[92m{str(record)}\033[0m')
             self.add_email(record)
@@ -594,14 +594,28 @@ class AssistantBot:
     # поиск по имени и по совпадениям
     @input_error
     def search(self):
+        table = Table(title="Search results", style="cyan", title_style="bold magenta")
+        table.add_column("Name", style="red", justify="center")
+        table.add_column("Phones", style="bold blue", justify="center")
+        table.add_column("Birthday", style="bold green", justify="center")
+        table.add_column("Email", style="bold blue", justify="center")
+        table.add_column("Address", style="yellow", justify="center")
+        table.add_column("Days to birthday", style="yellow", justify="center")
         while True:
             print('=' * 100)
-            print('Enter at least 3 letters or numbers to search or press ENTER to exit')
+            print(f'\033[38;2;10;235;190mEnter at least 3 letters or numbers to search or press ENTER to exit.\033[0m')
             res = input('Enter your text=>  ').lower()
             if res:
-                print(self.phone_book.search(res))
+                result = self.phone_book.search(res).split('\n')
+                if result:
+                    for item in result:
+                        record = item.split(',')
+                        table.add_row(record[0], record[1], record[2], record[3], record[4], record[5])
+                        self.console.print(table)
+                print(f'\033[38;2;10;235;190mNo matches found.\033[0m')        
             else:
                 break
+            
 
     # работа через интератор
     @input_error
@@ -616,13 +630,13 @@ class AssistantBot:
         print('=' * 100)
         print(f'\033[38;2;10;235;190mEnter how many records to display or press ENTER to skip.\033[0m')
         item_number = input('Enter number=> ')
-        try:
-            item_number = int(item_number)
-        except ValueError:
-            print(f'\033[91mYou entered letters: {item_number}. Please enter only numbers.\033[0m')
         if not self.phone_book:
             print('No contacts')
         if item_number:
+            try:
+                item_number = int(item_number)
+            except ValueError:
+                print(f'\033[91mYou entered letters: {item_number}. Please enter only numbers.\033[0m')
             iteration_count = 0
             for name, record in self.phone_book.data.items():
                 phone_str = "\n".join("; ".join(p.value for p in record.phones[i:i + 2]) for i in range(0, len(record.phones), 2))
