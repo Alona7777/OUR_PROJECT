@@ -9,7 +9,7 @@ from task_for_birthday import birthdays_for_date_menu, get_birthdays_per_week_me
 
 
 def start_menu():
-    assistent_bot = AssistantBot()
+    assistant_bot = AssistantBot()
     notes_manager = NotesManager()
 
     current_menu_number = 1
@@ -19,7 +19,7 @@ def start_menu():
 
     # Function definitions
     def f_exit():
-        assistent_bot.exit()
+        assistant_bot.exit()
         print(colored('Good bye!', text_colors))
         # time.sleep(1)
         exit()
@@ -36,41 +36,41 @@ def start_menu():
         'ADD': [function_stub, 2, 1],
         'EDIT': [function_stub, 3, 1],
         'DELETE': [function_stub, 4, 1],
-        'SEARCH': [assistent_bot.search, 1, 1],
-        'SHOW ALL': [assistent_bot.show_all, 1, 1],
+        'SEARCH': [assistant_bot.search, 1, 1],
+        'SHOW ALL': [assistant_bot.show_all, 1, 1],
         'NOTE': [function_stub, 5, 1],
         'GOODIES': [function_stub, 6, 1],
         'EXIT': [f_exit, 2, 1],
     }
 
     commands_add = {
-        'CONTACT': [assistent_bot.add_contact, 1, 1],
-        'PHONE': [assistent_bot.add_phone_menu, 1, 1],
-        'BIRTHDAY': [assistent_bot.add_birthday_menu, 1, 1],
-        'EMAIL': [assistent_bot.add_email_menu, 1, 1],
-        'ADDRESS': [assistent_bot.add_address_menu, 1, 1],
+        'CONTACT': [assistant_bot.add_contact, 1, 1],
+        'PHONE': [assistant_bot.add_phone_menu, 1, 1],
+        'BIRTHDAY': [assistant_bot.add_birthday_menu, 1, 1],
+        'EMAIL': [assistant_bot.add_email_menu, 1, 1],
+        'ADDRESS': [assistant_bot.add_address_menu, 1, 1],
         'NOTE': [notes_manager.note_add_menu, 5, 1],
         'RETURN TO MAIN MENU': [function_stub, 1, 0],
         'EXIT': [f_exit, 0, 0],
     }
 
     commands_edit = {
-        'NAME': [assistent_bot.edit_name, 1, 1],
-        'PHONE': [assistent_bot.edit_phone_menu, 1, 1],
-        'BIRTHDAY': [assistent_bot.edit_birthday_menu, 1, 1],
-        'EMAIL': [assistent_bot.edit_email, 1, 1],
-        'ADDRESS': [assistent_bot.edit_address, 1, 1],
+        'NAME': [assistant_bot.edit_name, 1, 1],
+        'PHONE': [assistant_bot.edit_phone_menu, 1, 1],
+        'BIRTHDAY': [assistant_bot.edit_birthday_menu, 1, 1],
+        'EMAIL': [assistant_bot.edit_email, 1, 1],
+        'ADDRESS': [assistant_bot.edit_address, 1, 1],
         'NOTE': [function_stub, 7, 1],
         'RETURN TO MAIN MENU': [function_stub, 1, 0],
         'EXIT': [f_exit, 0, 0],
     }
 
     commands_del = {
-        'CONTACT': [assistent_bot.delete_contact_menu, 1, 1],
-        'PHONE': [assistent_bot.delete_phone_menu, 1, 1],
-        'BIRTHDAY': [assistent_bot.delete_birthday_menu, 1, 1],
-        'EMAIL': [assistent_bot.delete_email_menu, 1, 1],
-        'ADDRESS': [assistent_bot.delete_address_menu, 1, 1],
+        'CONTACT': [assistant_bot.delete_contact_menu, 1, 1],
+        'PHONE': [assistant_bot.delete_phone_menu, 1, 1],
+        'BIRTHDAY': [assistant_bot.delete_birthday_menu, 1, 1],
+        'EMAIL': [assistant_bot.delete_email_menu, 1, 1],
+        'ADDRESS': [assistant_bot.delete_address_menu, 1, 1],
         'NOTE': [function_stub, 7, 1],
         'RETURN TO MAIN MENU': [function_stub, 1, 0],
         'EXIT': [f_exit, 0, 0],
@@ -78,7 +78,7 @@ def start_menu():
 
     commands_note = {
         'ADD NOTE': [notes_manager.note_add_menu, 5, 1],
-        'CHARGE NOTE': [notes_manager.note_charge_menu, 5, 1],
+        'EDIT NOTE': [notes_manager.note_charge_menu, 5, 1],
         'DELETE NOTE': [notes_manager.note_delete_menu, 5, 1],
         'SEARCH NOTE': [notes_manager.note_search_menu, 5, 1],
         'SHOW ALL NOTE': [notes_manager.note_show_menu, 5, 1],
@@ -96,32 +96,33 @@ def start_menu():
     }
 
     commands_anecdotes = {
-        'Українскою мовою': [anecdotes_ua_menu, 6, 1],
+        'Українською мовою': [anecdotes_ua_menu, 6, 1],
         'English language': [anecdotes_en_menu, 6, 1],
-        'RETURN TO MAIN MENU' : [function_stub, 1, 0],
+        'RETURN TO MAIN MENU': [function_stub, 1, 0],
         'EXIT': [f_exit, 2, 1],
     }
 
     commands_birthdays = {
         'FOR THIS DAY': [birthdays_for_date_menu, 8, 1],
         'THIS WEEK': [get_birthdays_per_week_menu, 8, 1],
-        'FOR A FEW DAYS' : [birthday_in_given_days_menu, 8, 1],
-        'RETURN TO MAIN MENU' : [function_stub, 8, 0],
+        'FOR A FEW DAYS': [birthday_in_given_days_menu, 8, 1],
+        'RETURN TO MAIN MENU': [function_stub, 8, 0],
         'EXIT': [f_exit, 2, 1],
     }
     # Функция для получения ввода пользователя
+
     def get_user_input(commands_menu):
         print(colored('=' * 100, text_colors))
-        result = questionary.select('Select a team:', choices = commands_menu.keys()).ask()
+        result = questionary.select('Select a team:', choices=commands_menu.keys()).ask()
         return result
 
     # Основной цикл ввода
-    while True :
+    while True:
         commands_menu = commands_start
         print(colored('=' * 100, text_colors))
         if current_menu_number == 1:
             commands_menu = commands_start
-            print(colored('How can I help you? Please choose: |ADD|CHANGE|DELETE|SEARCH|SHOW ALL|', text_colors))
+            print(colored('How can I help you? Please choose: |ADD|EDIT|DELETE|SEARCH|SHOW ALL|', text_colors))
         elif current_menu_number == 2:
             commands_menu = commands_add
             print(colored('We will add more? Please choose: |CONTACT|PHONE|BIRTHDAY|EMAIL|NOTE|', text_colors))
@@ -134,14 +135,14 @@ def start_menu():
                           text_colors))
         elif current_menu_number == 5:
             commands_menu = commands_note
-            print(colored('How can I help you? Please choose: |ADD NOTE|CHARGE NOTE|DELETE NOTE|SEARCH NOTE|'
+            print(colored('How can I help you? Please choose: |ADD NOTE|EDIT NOTE|DELETE NOTE|SEARCH NOTE|'
                           'SHOW ALL NOTE|', text_colors))
         elif current_menu_number == 6:
             commands_menu = commands_goodies
             print(colored('How can I help you? Please choose: |FILE SORTING|WEATHER|ANECDOTES|', text_colors))
         elif current_menu_number == 7:
             commands_menu = commands_anecdotes
-            print(colored('Choose language. Please choose: |Українскою мовою|English language|', text_colors))
+            print(colored('Choose language. Please choose: |Українською мовою|English language|', text_colors))
         elif current_menu_number == 8:
             commands_menu = commands_birthdays
             print(colored('Choose language. Please choose: |FOR THIS DAY|THIS WEEK|FOR A FEW DAYS|', text_colors))
