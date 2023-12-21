@@ -78,7 +78,7 @@ def start_menu():
 
     commands_note = {
         'ADD NOTE': [notes_manager.note_add_menu, 5, 1],
-        'CHARGE NOTE': [notes_manager.note_charge_menu, 5, 1],
+        'EDIT NOTE': [notes_manager.note_charge_menu, 5, 1],
         'DELETE NOTE': [notes_manager.note_delete_menu, 5, 1],
         'SEARCH NOTE': [notes_manager.note_search_menu, 5, 1],
         'SHOW ALL NOTE': [notes_manager.note_show_menu, 5, 1],
@@ -134,14 +134,14 @@ def start_menu():
                           text_colors))
         elif current_menu_number == 5:
             commands_menu = commands_note
-            print(colored('How can I help you? Please choose: |ADD NOTE|CHARGE NOTE|DELETE NOTE|SEARCH NOTE|'
+            print(colored('How can I help you? Please choose: |ADD NOTE|CHANGE NOTE|DELETE NOTE|SEARCH NOTE|'
                           'SHOW ALL NOTE|', text_colors))
         elif current_menu_number == 6:
             commands_menu = commands_goodies
             print(colored('How can I help you? Please choose: |FILE SORTING|WEATHER|ANECDOTES|', text_colors))
         elif current_menu_number == 7:
             commands_menu = commands_anecdotes
-            print(colored('Choose language. Please choose: |Українскою мовою|English language|', text_colors))
+            print(colored('Choose language. Please choose: |Українською мовою|English language|', text_colors))
         elif current_menu_number == 8:
             commands_menu = commands_birthdays
             print(colored('Choose language. Please choose: |FOR THIS DAY|THIS WEEK|FOR A FEW DAYS|', text_colors))
