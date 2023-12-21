@@ -1,0 +1,2 @@
+[console_scripts]
+scarab_helper = our_project.main:start_menu
