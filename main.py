@@ -96,7 +96,7 @@ def start_menu():
     }
 
     commands_anecdotes = {
-        'Українскою мовою': [anecdotes_ua_menu, 6, 1],
+        'Українською мовою': [anecdotes_ua_menu, 6, 1],
         'English language': [anecdotes_en_menu, 6, 1],
         'RETURN TO MAIN MENU' : [function_stub, 1, 0],
         'EXIT': [f_exit, 2, 1],
