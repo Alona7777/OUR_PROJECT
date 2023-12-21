@@ -1,4 +1,6 @@
 import pickle
+from rich.console import Console
+from rich.table import Table
 
 
 class Note:
@@ -11,9 +13,21 @@ class Note:
 
 class NotesManager:
     def __init__(self):
+        self.console = Console()
         self.notes = []
         self.file = 'Save_Notes.bin'
         self.read_from_file()
+        
+    def table_print_note(self):
+        table = Table(title="Note Information", style="cyan", title_style="bold magenta")
+        table.add_column("Content", style="bold green", justify="center")
+        table.add_column("Tags", style="bold blue", justify="center")
+    
+        table.add_row(
+            str(self.notes.content),
+            str(self.note.tags),
+          )
+        return table
 
     def add_note(self, content, tags=None):
         if tags is None:
@@ -39,20 +53,25 @@ class NotesManager:
 
     def search_notes_by_tag(self, tag):
         return [note for note in self.notes if tag in note.tags]
-
+            
     def display_all_notes(self):
+        table = Table(title="Note Information", style="cyan", title_style="bold magenta")
+        table.add_column("Content", style="bold blue", justify="center")
+        table.add_column("Tags", style="bold blue", justify="center")
         if not self.notes:
-            print('List empty')
-        for i, note in enumerate(self.notes, 1):
-            print(f"{i}. Content:{note.content}, Tags:{note.tags}")
+            print('\033[91mList empty.\033[0m')
+        else:
+            for i, note in enumerate(self.notes, 1):
+                table.add_row(str(note.content), str(note.tags))
+            self.console.print(table)
 
     def edit_note_content(self, tag, new_content):
         for note in self.notes:
             if tag not in note.tags:
-                print("Invalid note index.")
+                print('\033[91mInvalid note index.\033[0m')
             if tag in note.tags:
                 note.content = new_content
-                print("Note update successfully.")
+                print(f'\033[92mNote update successfully.\033[0m')
 
     def search_and_sort_notes(self, keyword):
         found_notes = [note for note in self.notes if keyword in note.tags]
@@ -63,84 +82,45 @@ class NotesManager:
         initial_len = len(self.notes)
         self.notes = [note for note in self.notes if index not in note.tags]
         if len(self.notes) == initial_len:
-            print(f"No note found with tag '{index}'.")
+            print(f'\033[91mNo note found with tag "{index}".\033[0m')
         else:
-            print(f"Note with tag '{index}' deleted successfully.")
+            print(f'\033[92mNote with tag "{index}" deleted successfully.\033[0m')
 
     def note_add_menu(self):
-        content = input("Enter your text for the note: ")
-        tags = input("Enter tags separated by commas (or press Enter if no tags): ").split(',')
+        content = input('Enter your text for the note: ')
+        tags = input('Enter tags separated by commas (or press Enter if no tags): ').split(',')
         self.add_note(content, tags)
         self.write_to_file()
 
     def note_charge_menu(self):
-        index = int(input("Enter index of the note to edit: "))
-        new_content = input("Enter new text for the note: ")
+        index = int(input('Enter index of the note to edit: '))
+        new_content = input('Enter new text for the note: ')
         self.edit_note_content(index, new_content)
         self.write_to_file()
 
     def note_delete_menu(self):
-        index = int(input("Enter index of the note to delete: "))
+        index = int(input('Enter index of the note to delete: '))
         self.delete_note_by_index(index)
         self.write_to_file()
 
     def note_search_menu(self):
-        tag_to_search = input("Enter tag for search and sort: ")
+        table = Table(title="Note Information", style="cyan", title_style="bold magenta")
+        table.add_column("Content", style="bold blue", justify="center")
+        table.add_column("Tags", style="bold blue", justify="center")
+        tag_to_search = input('Enter tag for search and sort: ')
         sorted_notes = self.search_and_sort_notes(tag_to_search)
         if sorted_notes:
-            print(f"Found and Sorted Notes with Tag '{tag_to_search}':")
+            print(f'\033[92mFound and Sorted Notes with Tag "{tag_to_search}":\033[0m')
             for note in sorted_notes:
-                print(f"Content: {note.content}, Tags: {note.tags}")
+                table.add_row(str(note.content), str(note.tags))
+            self.console.print(table)
         else:
-            print('Nothing to sort!')
+            print('\033[91mNothing to sort!\033[0m')
 
     def note_show_menu(self):
         self.display_all_notes()
 
-def interact_with_user():
-    notes_manager = NotesManager()
-
-    while True:
-        print("\n1. Add Note")
-        print("2. Show all Note")
-        print("3. Search and Sort Notes by Tag")
-        print("4. Edit Note")
-        print("5. Delete Note")
-        print("6. Exit")
-
-        choice = input("Choice your option (1 - 6): ")
-
-        if choice == "1":
-            content = input("Enter your text for the note: ")
-            tags = input("Enter tags separated by commas (or press Enter if no tags): ").split(',')
-            notes_manager.add_note(content, tags)
-        elif choice == "2":
-            notes_manager.display_all_notes()
-        elif choice == "3":
-            tag_to_search = input("Enter tag for search and sort: ")
-            sorted_notes = notes_manager.search_and_sort_notes(tag_to_search)
-            if sorted_notes:
-                print(f"Found and Sorted Notes with Tag '{tag_to_search}':")
-                for note in sorted_notes:
-                    print(f"Content: {note.content}, Tags: {note.tags}")
-            else:
-                print('Nothing to sort!')
-        elif choice == "4":
-            index = int(input("Enter index of the note to edit: "))
-            new_content = input("Enter new text for the note: ")
-            notes_manager.edit_note_content(index, new_content)
-        elif choice == "5":
-            index = int(input("Enter index of the note to delete: "))
-            notes_manager.delete_note_by_index(index)
-        elif choice == "6":
-            if notes_manager.exit():
-                print('Notes saved and exiting successfully! Good Luck!')
-            else:
-                print('exit failed.')
-            break
-        else:
-            print("Wrong choice!!! Try again!.")
 
 
 if __name__ == "__main__":
-    interact_with_user()
+    pass
