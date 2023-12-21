@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d680b160-1a10-4829-9249-29fc54519031" name="Changes" comment="исправил граматику в меню &quot;NOTE&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Phone_Book.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Phone_Book.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contact_book.py" beforeDir="false" afterPath="$PROJECT_DIR$/contact_book.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weather.py" beforeDir="false" afterPath="$PROJECT_DIR$/weather.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

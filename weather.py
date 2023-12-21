@@ -19,9 +19,9 @@ def get_weather(api_key, city):
         weather_data = response.json()
         temperature = weather_data['main']['temp']
         description = weather_data['weather'][0]['description']
-        print(f"\033[38;2;10;235;190mПогода в {city}: {temperature}°C, {description}\033[0m")
+        print(f"\033[38;2;10;235;190mThe weather in {city}: {temperature}°C, {description}\033[0m")
     else:
-        print(f"\033[91mНе вдалося отримати погоду. Статус коду: {response.status_code}\033[0m")
+        print(f"\033[91mFailed to get weather. Code status: {response.status_code}\033[0m")
 
 
 def get_joke():
@@ -50,7 +50,7 @@ def anecdotes_en_menu():
 
 def weather_menu():
     api_key = '43a8f3599db25559dcfc8b220a2adb8d'
-    city = input("Enter you city in english pleas: ")
+    city = input("Please enter your city in English: ")
     get_weather(api_key, city)
 
 #

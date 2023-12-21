@@ -41,7 +41,7 @@ class Address(Field):
         self.__value = value
 
     def __str__(self):
-        return str(self.__value) 
+        return str(self.__value)
 
 
 class Email(Field):
@@ -57,7 +57,7 @@ class Email(Field):
         self.__value = value
 
     def __str__(self):
-        return str(self.__value)   
+        return str(self.__value)
 
 
 class Birthday(Field):
@@ -71,7 +71,7 @@ class Birthday(Field):
             self.__value = datetime.strptime(value, '%Y.%m.%d').date()
         except ValueError:
             raise ValueError('\033[91mInvalid date format. Correct format: YYYY.MM.DD\033[0m')
-        
+
     def __str__(self):
         return self.__value.strftime('%Y.%m.%d')
 
@@ -86,7 +86,7 @@ class Phone(Field):
         if len(value) != 10 or not value.isdigit():
             raise ValueError('\033[91mThe phone number should be digits only and have 10 symbols\033[0m')
         self.__value = value
-        
+
     def __str__(self):
         return self.__value.strftime('%Y.%m.%d')
 
@@ -102,10 +102,10 @@ class Record:
     def add_phone(self, value: str):
         phone = Phone(value)
         self.phones.append(phone)
-    
+
     def add_email(self, value: str):
         self.email = Email(value)
-    
+
     def add_address(self, value: str):
         self.address = Address(value)
 
@@ -116,7 +116,7 @@ class Record:
         for item in self.phones:
             if item.value == phone:
                 self.phones.remove(item)
-                return f'The phone number: {phone} has been deleted'   
+                return f'The phone number: {phone} has been deleted'
         return f'The phone number {phone} not found'
 
     def edit_phone(self, old_phone: str, new_phone: str):
@@ -147,9 +147,9 @@ class Record:
         return day_to_birthday
 
     def __str__(self):
- 
-        return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; "\
-               f"|| Birthday: {self.birthday}  || Email: {self.email}  || Address: {self.address}"\
+
+        return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; " \
+               f"|| Birthday: {self.birthday}  || Email: {self.email}  || Address: {self.address}" \
                f"|| Days to birthday: {self.days_to_birthday()}||"
 
 
@@ -169,7 +169,7 @@ class AddressBook(UserDict):
 
     def search(self, value: str):
         if len(value) < 3:
-            return 'You need at least 3 letters to search by name or 3 didgit to search by phone number'
+            return 'You need at least 3 letters to search by name or 3 didgit to search by phone number.'
         search_contact = []
         result = ''
         for name, rec in self.data.items():
@@ -207,23 +207,23 @@ class AddressBook(UserDict):
                 result = ''
         print(result)
         yield result
-     
+
     def write_to_file(self):
         with open(self.file, 'wb') as file:
             pickle.dump(self.data, file)
-    
+
     def read_from_file(self):
         with open(self.file, 'rb') as file:
             self.data = pickle.load(file)
         return self.data
-        
+
 
 class Controller(cmd.Cmd):
     def exit(self):
         self.book.dump()
-        return True 
+        return True
 
-    
+
 # декоратор по исправлению ошибок. НАПИСАН КОРЯВО, нужно редактировать!!!
 def input_error(func):
     def inner(*args, **kwargs):
@@ -236,50 +236,53 @@ def input_error(func):
             return 'Incorrect information entered'
         except IndexError:
             return 'Enter user name'
-    return inner      
+
+    return inner
 
 
 '''эта часть кода отвечает за выполнение команд'''
+
+
 class AssistantBot:
     def __init__(self):
         self.console = Console()
         self.phone_book = AddressBook()
-        if os.path.isfile(self.phone_book.file):      # запуск файла с сохранеными контактами!!!
+        if os.path.isfile(self.phone_book.file):  # запуск файла с сохранеными контактами!!!
             self.phone_book.read_from_file()
-     
+
     # вывод в таблицу rich       
     def table_print(self, record: Record):
-        table = Table(title = "Contact Information", style = "cyan", title_style = "bold magenta")
-        table.add_column("Name", style = "bold green")
-        table.add_column("Phones", style = "yellow")
-        table.add_column("Birthday", style = "yellow")
-        table.add_column("Email", style = "bold blue")
-        table.add_column("Address", style = "yellow")
-        table.add_column("Days to birthday", style = "yellow")
-        
-        phone_str = "\n".join("; ".join(p.value for p in record.phones[i :i + 2]) for i in range(0, len(record.phones), 2))
-            # {'; '.join(p.value for p in self.phones)}
+        table = Table(title="Contact Information", style="cyan", title_style="bold magenta")
+        table.add_column("Name", style="bold green", justify="center")
+        table.add_column("Phones", style="yellow", justify="center")
+        table.add_column("Birthday", style="yellow", justify="center")
+        table.add_column("Email", style="bold blue", justify="center")
+        table.add_column("Address", style="yellow", justify="center")
+        table.add_column("Days to birthday", style="yellow", justify="center")
+
+        phone_str = "\n".join(
+            "; ".join(p.value for p in record.phones[i:i + 2]) for i in range(0, len(record.phones), 2))
+        # {'; '.join(p.value for p in self.phones)}
         table.add_row(
-                str(record.name.value),
-                str(phone_str),
-                str(record.birthday),
-                str(record.email),
-                str(record.address),
-                str(record.days_to_birthday())
-            )
+            str(record.name.value),
+            str(phone_str),
+            str(record.birthday),
+            str(record.email),
+            str(record.address),
+            str(record.days_to_birthday())
+        )
         return table
-        
+
     # отдельная функция по поиску рекорд, чтобы избежать ошибку с несущестующим контактом 
-    @input_error    
+    @input_error
     def find_record(self):
         print('=' * 100)
-        completer = WordCompleter(list(self.phone_book.keys()), ignore_case = True)
-        name = prompt('Enter the name of an existing contact=> ', completer = completer)
+        completer = WordCompleter(list(self.phone_book.keys()), ignore_case=True)
+        name = prompt('Enter the name of an existing contact=> ', completer=completer)
         record: Record = self.phone_book.find(name)
         if record:
-           return record
+            return record
 
-    
     # добавление нового контакта
     @input_error
     def add_contact(self):
@@ -294,15 +297,16 @@ class AssistantBot:
         print(f'\033[92mYou have created a new contact:\033[0m')
         self.console.print(contact)
         # print(f'\033[92mYou have created a new contact:\n{contact}\033[0m')
-        return 
-    
+        return
+
     # добавление номера телефона
     @input_error
     def add_phone(self, record):
         count_phone = 1
         while True:
             try:
-                print(f'\033[38;2;10;235;190mEnter the phone number {count_phone} or press ENTER to skip.\033[0m')
+                print(
+                    f'\033[38;2;10;235;190mPlease enter the Phone Number {count_phone}, or press ENTER to skip.\033[0m')
                 phone = input('Enter phone=> ')
                 if phone:
                     record.add_phone(phone)
@@ -313,7 +317,7 @@ class AssistantBot:
                     return
             except ValueError as e:
                 print(e)
-    
+
     @input_error
     def add_phone_menu(self):
         while True:
@@ -324,7 +328,7 @@ class AssistantBot:
             self.add_phone(record)
             self.console.print(self.table_print(record))
             return
-    
+
     # добавление даты дня рождения
     def add_birthday(self, record: Record):
         while True:
@@ -340,10 +344,9 @@ class AssistantBot:
                     return
             except ValueError as e:
                 print(e)
-            
-    
+
     @input_error
-    def add_birthday_menu(self):    
+    def add_birthday_menu(self):
         while True:
             record = self.find_record()
             if not record:
@@ -352,7 +355,7 @@ class AssistantBot:
             elif record.birthday == None:
                 self.add_birthday(record)
                 self.console.print(self.table_print(record))
-                return 
+                return
             else:
                 print('\033[91mThis contact has date of birth\033[0m')
                 return
@@ -389,7 +392,7 @@ class AssistantBot:
             else:
                 print('\033[91mThis contact has email\033[0m')
                 return
-     
+
     # добавление адреса   
     @input_error
     def add_address(self, record: Record):
@@ -402,7 +405,7 @@ class AssistantBot:
             return
         else:
             return
-        
+
     @input_error
     def add_address_menu(self):
         while True:
@@ -417,7 +420,7 @@ class AssistantBot:
             else:
                 print('\033[91mThis contact has address\033[0m')
                 return
-       
+
     # изменение телефона
     @input_error
     def edit_phone(self, record: Record):
@@ -430,7 +433,7 @@ class AssistantBot:
         self.phone_book.add_record(record)
         print(f'\033[38;2;10;235;190mYou changed the contact:\n\033[0m')
         self.console.print(self.table_print(record))
-        return 
+        return
 
     @input_error
     def edit_phone_menu(self):
@@ -442,7 +445,7 @@ class AssistantBot:
             print(f'\033[92m{str(record)}\033[0m')
             self.edit_phone(record)
             return
-    
+
     # изменение email      
     @input_error
     def edit_email(self):
@@ -456,10 +459,10 @@ class AssistantBot:
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mYou changed the contact:\n\033[0m')
             self.console.print(self.table_print(record))
-            return 
+            return
 
     @input_error
-    def edit_address(self) :
+    def edit_address(self):
         while True:
             record = self.find_record()
             if not record:
@@ -470,7 +473,7 @@ class AssistantBot:
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mYou changed the contact:\n\033[0m')
             self.console.print(self.table_print(record))
-            return 
+            return
 
     # изменение имени
     @input_error
@@ -488,9 +491,9 @@ class AssistantBot:
                 self.phone_book.add_record(record)
                 print(f'\033[38;2;10;235;190mName changed successfully from {old_name} to {new_name}.\n\033[0m')
                 self.console.print(self.table_print(record))
-                return 
+                return
             else:
-                return 
+                return
 
     # изменение даты рождения
     @input_error
@@ -505,9 +508,8 @@ class AssistantBot:
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mYou changed the contact:\n\033[0m')
             self.console.print(self.table_print(record))
-            return 
-    
-    
+            return
+
     # удаление номера
     @input_error
     def delete_phone(self, record: Record):
@@ -515,7 +517,7 @@ class AssistantBot:
         result = record.remove_phone(phone)
         print(f'\033[38;2;10;235;190mThe phone number {phone} was removed.\033[0m')
         return result
-    
+
     @input_error
     def delete_phone_menu(self):
         while True:
@@ -528,9 +530,9 @@ class AssistantBot:
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mYou changed the contact:\n.\033[0m')
             self.console.print(self.table_print(record))
-            return 
-    
-    # удаление даты рождения   
+            return
+
+    # удаление даты рождения
     @input_error
     def delete_birthday_menu(self):
         while True:
@@ -543,11 +545,11 @@ class AssistantBot:
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mThe date of birth was removed.\033[0m')
             self.console.print(self.table_print(record))
-            return 
+            return
 
     # удаление email
     @input_error
-    def delete_email_menu(self) :
+    def delete_email_menu(self):
         while True:
             record = self.find_record()
             if not record:
@@ -558,11 +560,11 @@ class AssistantBot:
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mThe email was removed.\033[0m')
             self.console.print(self.table_print(record))
-            return 
+            return
 
-    # удаление адреса  
+    # удаление адреса
     @input_error
-    def delete_address_menu(self) :
+    def delete_address_menu(self):
         while True:
             record = self.find_record()
             if not record:
@@ -573,12 +575,12 @@ class AssistantBot:
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mThe address was removed.\033[0m')
             self.console.print(self.table_print(record))
-            return 
-    
+            return
+
     # удаление контакта
     @input_error
     def delete_contact_menu(self):
-         while True:
+        while True:
             record = self.find_record()
             if not record:
                 print('\033[91mThe contact was not found\033[0m')
@@ -586,13 +588,13 @@ class AssistantBot:
             print(f'\033[92m{str(record)}\033[0m')
             self.phone_book.delete(record.name.value)
             print(f'\033[38;2;10;235;190mThe contact {record.name.value} was removed.\033[0m')
-            return 
+            return
 
     # поиск по имени и по совпадениям
     @input_error
     def search(self):
         while True:
-            print('='*100)
+            print('=' * 100)
             print('Enter at least 3 letters or numbers to search or press ENTER to exit')
             res = input('Enter your text=>  ').lower()
             if res:
@@ -603,7 +605,7 @@ class AssistantBot:
     # работа через интератор
     @input_error
     def show_all(self):
-        print('='*100)
+        print('=' * 100)
         print(f'\033[38;2;10;235;190mEnter how many records to display or press ENTER to skip.\033[0m')
         item_number = input('Enter number=> ')
         if self.phone_book:
@@ -634,12 +636,11 @@ class AssistantBot:
         else:
             print('No contacts')
 
- # выход из програмы и сохранение файла!
+    # выход из програмы и сохранение файла!
     def exit(self):
         self.phone_book.write_to_file()
         return
-    
+
 
 if __name__ == "__main__":
     pass
-  
