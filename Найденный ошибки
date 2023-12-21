@@ -39,3 +39,13 @@ What do you want to change? Please choose: |PHONE|BIRTHDAY|EMAIL|NOTE| ---->>>>W
 
 Enter at least 3 letters or numbers to search or press ENTER to exit
 Enter your text=> можно просто оставить press ENTER to exit
+
+!!! регистры !!!  контакт Olga и olga -  считываются программой как разные
+
+программа не запрашивает подтверждение на удаление контакта
+
+Enter you city in english pleas:    --- >>> Please enter your city in English:
+
+? Select a team: WEATHER
+Enter you city in english pleas: Tokyo
+Погода в Tokyo: 11.39°C, few clouds    огода в токио должна быть на английском
