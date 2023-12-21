@@ -37,4 +37,5 @@ What do you want to change? Please choose: |PHONE|BIRTHDAY|EMAIL|NOTE| ---->>>>W
 
 не работает поиск по адресу дню рождения и почте
 
-когда поиск сделан мне кажется нужен ворзврат в обычное меню а программа снова запрашивает Enter your text=>   НЕТ ВЫХОДА ИЗ МЕНЮ、программа бесконечно заплашивает ввод
+Enter at least 3 letters or numbers to search or press ENTER to exit
+Enter your text=> можно просто оставить press ENTER to exit
