@@ -78,13 +78,13 @@ class NotesManager:
         sorted_notes = sorted(found_notes, key=lambda x: x.tags)
         return sorted_notes
 
-    def delete_note_by_index(self, index):
+    def delete_note_by_index(self, tag):
         initial_len = len(self.notes)
-        self.notes = [note for note in self.notes if index not in note.tags]
+        self.notes = [note for note in self.notes if tag not in note.tags]
         if len(self.notes) == initial_len:
-            print(f'\033[91mNo note found with tag "{index}".\033[0m')
+            print(f'\033[91mNo note found with tag "{tag}".\033[0m')
         else:
-            print(f'\033[92mNote with tag "{index}" deleted successfully.\033[0m')
+            print(f'\033[92mNote with tag "{tag}" deleted successfully.\033[0m')
 
     def note_add_menu(self):
         content = input('Enter your text for the note: ')
@@ -93,13 +93,13 @@ class NotesManager:
         self.write_to_file()
 
     def note_charge_menu(self):
-        index = int(input('Enter index of the note to edit: '))
+        index = input('Enter tag of the note to edit: ')
         new_content = input('Enter new text for the note: ')
         self.edit_note_content(index, new_content)
         self.write_to_file()
 
     def note_delete_menu(self):
-        index = int(input('Enter index of the note to delete: '))
+        index = input('Enter tag of the note to delete: ')
         self.delete_note_by_index(index)
         self.write_to_file()
 
