@@ -608,51 +608,74 @@ class AssistantBot:
             
 
     # работа через интератор
-    @input_error
     def show_all(self):
-        table = Table(title="Contact Information", style="cyan", title_style="bold magenta", width = 100)
-        table.add_column("Name", style="red", justify="center")
-        table.add_column("Phones", style="bold blue", justify="center")
-        table.add_column("Birthday", style="bold green", justify="center")
-        table.add_column("Email", style="bold blue", justify="center")
-        table.add_column("Address", style="yellow", justify="center")
-        table.add_column("Days to birthday", style="yellow", justify="center")
-        print('=' * 100)
-        print(f'\033[38;2;10;235;190mEnter how many records to display or press ENTER to skip.\033[0m')
-        item_number = input('Enter number=> ')
-        if not self.phone_book:
-            print(f'\033[91mNo contacts.\033[0m')
-            return
-        if item_number:
-            try:
-                item_number = int(item_number)
-            except ValueError:
-                print(f'\033[91mYou entered letters: {item_number}. Please enter only numbers.\033[0m')
-                
-            iteration_count = 0
-            for name, record in self.phone_book.data.items():
-                phone_str = "\n".join("; ".join(p.value for p in record.phones[i:i + 2]) for i in range(0, len(record.phones), 2))
-                table.add_row(str(record.name.value), 
-                            str(phone_str), 
-                            str(record.birthday), 
-                            str(record.email), 
-                            str(record.address), 
-                            str(record.days_to_birthday())
-                            )
-                iteration_count += 1
-                if iteration_count == item_number:
+        while True:
+            table = Table(title="Contact Information", style="cyan", title_style="bold magenta", width = 100)
+            table.add_column("Name", style="red", justify="center")
+            table.add_column("Phones", style="bold blue", justify="center")
+            table.add_column("Birthday", style="bold green", justify="center")
+            table.add_column("Email", style="bold blue", justify="center")
+            table.add_column("Address", style="yellow", justify="center")
+            table.add_column("Days to birthday", style="yellow", justify="center")
+            print('=' * 100)
+            print(f'\033[38;2;10;235;190mEnter how many records to display or press ENTER to skip.\033[0m')
+            item_number = input('Enter number=> ')
+            if item_number.isdigit():
+                if self.phone_book :
+                    # Введено число
+                    item_number = int(item_number)
+                    metka = 0
+                    # phones = 'Contacts:\n'
+                    iteration_count = 0
+                    for name, record in self.phone_book.data.items() :
+                        phone_str = "\n".join(
+                            "; ".join(p.value for p in record.phones[i :i + 2]) for i in range(0, len(record.phones), 2))
+                        table.add_row(str(record.name.value),
+                                      str(phone_str),
+                                      str(record.birthday),
+                                      str(record.email),
+                                      str(record.address),
+                                      str(record.days_to_birthday())
+                                      )
+                        iteration_count += 1
+                        metka = 1
+
+                        if iteration_count % item_number == 0 :
+                            self.console.print(table)
+                            metka = 0
+                            table = Table(title = "Contact Information", style = "cyan", title_style = "bold magenta",
+                                          width = 100)
+                            table.add_column("Name", style = "red", justify = "center")
+                            table.add_column("Phones", style = "bold blue", justify = "center")
+                            table.add_column("Birthday", style = "bold green", justify = "center")
+                            table.add_column("Email", style = "bold blue", justify = "center")
+                            table.add_column("Address", style = "yellow", justify = "center")
+                            table.add_column("Days to birthday", style = "yellow", justify = "center")
+
+                    if metka == 1:
+                        self.console.print(table)
+                    return
+                else:
+                    print(f'\033[91mNo contacts.\033[0m')
+            elif item_number.isalpha() :
+                # Введены буквы
+                print(f'You entered letters: {item_number}')
+            else :
+                if self.phone_book :
+                    for name, record in self.phone_book.data.items() :
+                        phone_str = "\n".join(
+                            "; ".join(p.value for p in record.phones[i :i + 2]) for i in range(0, len(record.phones), 2))
+                        table.add_row(str(record.name.value),
+                                      str(phone_str),
+                                      str(record.birthday),
+                                      str(record.email),
+                                      str(record.address),
+                                      str(record.days_to_birthday())
+                                      )
                     self.console.print(table)
-        else:
-            for name, record in self.phone_book.data.items():
-                phone_str = "\n".join("; ".join(p.value for p in record.phones[i:i + 2]) for i in range(0, len(record.phones), 2))
-                table.add_row(str(record.name.value), 
-                                str(phone_str), 
-                                str(record.birthday), 
-                                str(record.email), 
-                                str(record.address), 
-                                str(record.days_to_birthday())
-                                )
-                self.console.print(table)
+                    return
+                else:
+                    print(f'\033[91mNo contacts.\033[0m')
 
     # выход из програмы и сохранение файла!
     def exit(self):
