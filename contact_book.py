@@ -125,7 +125,6 @@ class Record:
             if phone.value == old_phone:
                 phone.value = new_phone
                 return f'Phones: {"; ".join(p.value for p in self.phones)}'
-        # raise ValueError(f'Phone: {old_phone} not found!')
         return None
 
     def find_phone(self, phone: str):
@@ -150,10 +149,6 @@ class Record:
     def __str__(self):
         
         return f'{self.name.value}, {"; ".join(p.value for p in self.phones)}, {self.birthday}, {self.email}, {self.address}, {self.days_to_birthday()}'
-
-        # return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; " \
-        #        f"|| Birthday: {self.birthday}  || Email: {self.email}  || Address: {self.address}" \
-        #        f"|| Days to birthday: {self.days_to_birthday()}||"
 
 
 class AddressBook(UserDict):
@@ -251,7 +246,7 @@ class AssistantBot:
 
     # вывод в таблицу rich       
     def table_print(self, record: Record):
-        table = Table(title="Contact Information", style="cyan", title_style="bold magenta")
+        table = Table(title="Contact Information", style="cyan", title_style="bold magenta", width = 100)
         table.add_column("Name", style="red", justify="center")
         table.add_column("Phones", style="bold blue", justify="center")
         table.add_column("Birthday", style="bold green", justify="center")
@@ -274,7 +269,7 @@ class AssistantBot:
     # отдельная функция по поиску рекорд, чтобы избежать ошибку с несущестующим контактом 
     @input_error
     def find_record(self):
-        print('=' * 100)
+        print('=' * 150)
         completer = WordCompleter(list(self.phone_book.keys()), ignore_case=True)
         name = prompt('Enter the name of an existing contact=> ', completer=completer)
         record: Record = self.phone_book.find(name)
@@ -438,7 +433,7 @@ class AssistantBot:
             if not record:
                 print('\033[91mThe contact was not found.\033[0m')
                 return
-            print(f'\033[92m{str(record)}\033[0m')
+            self.console.print(self.table_print(record))
             self.edit_phone(record)
             return
 
@@ -450,7 +445,6 @@ class AssistantBot:
             if not record:
                 print('\033[91mThe contact was not found.\033[0m')
                 return
-            print(f'\033[92m{str(record)}\033[0m')
             self.add_email(record)
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mYou changed the contact:\n\033[0m')
@@ -464,7 +458,6 @@ class AssistantBot:
             if not record:
                 print('\033[91mThe contact was not found.\033[0m')
                 return
-            print(f'\033[92m{str(record)}\033[0m')
             self.add_address(record)
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mYou changed the contact:\n\033[0m')
@@ -499,7 +492,7 @@ class AssistantBot:
             if not record:
                 print('\033[91mThe contact was not found.\033[0m')
                 return
-            print(f'\033[92m{str(record)}\033[0m')
+            self.console.print(self.table_print(record))
             self.add_birthday(record)
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mYou changed the contact:\n\033[0m')
@@ -521,7 +514,7 @@ class AssistantBot:
             if not record:
                 print('\033[91mThe contact was not found.\033[0m')
                 return
-            print(f'\033[92m{str(record)}\033[0m')
+            self.console.print(self.table_print(record))
             self.delete_phone(record)
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mYou changed the contact:\n.\033[0m')
@@ -536,7 +529,6 @@ class AssistantBot:
             if not record:
                 print('\033[91mThe contact was not found.\033[0m')
                 return
-            print(f'\033[92m{str(record)}\033[0m')
             record.birthday = None
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mThe date of birth was removed.\033[0m')
@@ -551,7 +543,6 @@ class AssistantBot:
             if not record:
                 print('\033[91mThe contact was not found.\033[0m')
                 return
-            print(f'\033[92m{str(record)}\033[0m')
             record.email = None
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mThe email was removed.\033[0m')
@@ -566,7 +557,6 @@ class AssistantBot:
             if not record:
                 print('\033[91mThe contact was not found.\033[0m')
                 return
-            print(f'\033[92m{str(record)}\033[0m')
             record.address = None
             self.phone_book.add_record(record)
             print(f'\033[38;2;10;235;190mThe address was removed.\033[0m')
@@ -581,7 +571,7 @@ class AssistantBot:
             if not record:
                 print('\033[91mThe contact was not found.\033[0m')
                 return
-            print(f'\033[92m{str(record)}\033[0m')
+            self.console.print(self.table_print(record))
             print('\033[91mDo you really want to delete this contact? Please enter the number: 1.YES or press ENTER to skip.\033[0m')
             res = input('Enter your text=>  ').lower()
             if res in ('1', 'yes'):
@@ -594,7 +584,7 @@ class AssistantBot:
     # поиск по имени и по совпадениям
     @input_error
     def search(self):
-        table = Table(title="Search results", style="cyan", title_style="bold magenta")
+        table = Table(title="Search results", style="cyan", title_style="bold magenta", width = 100)
         table.add_column("Name", style="red", justify="center")
         table.add_column("Phones", style="bold blue", justify="center")
         table.add_column("Birthday", style="bold green", justify="center")
@@ -620,7 +610,7 @@ class AssistantBot:
     # работа через интератор
     @input_error
     def show_all(self):
-        table = Table(title="Contact Information", style="cyan", title_style="bold magenta")
+        table = Table(title="Contact Information", style="cyan", title_style="bold magenta", width = 100)
         table.add_column("Name", style="red", justify="center")
         table.add_column("Phones", style="bold blue", justify="center")
         table.add_column("Birthday", style="bold green", justify="center")
