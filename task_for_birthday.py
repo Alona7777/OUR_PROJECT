@@ -15,9 +15,10 @@ def birthdays_for_date(day):
     contact_birth = []
     for n, rec in assistent_bot.phone_book.data.items():
         name = n
-        birth = rec.birthday.value.replace(year=date_today.year)
-        if birth == date:
-            contact_birth.append(name)
+        if rec.birthday:
+            birth = rec.birthday.value.replace(year=date_today.year)
+            if birth == date:
+                contact_birth.append(name)
         
     if len(contact_birth) == 0:
         print(f'\033[38;2;10;235;190mNo Birthday this day.\033[0m')
@@ -51,13 +52,14 @@ def get_birthdays_per_week():
     birthday_per_week = []
     for n, rec in assistent_bot.phone_book.data.items():
         name = n
-        birth = rec.birthday.value.replace(year=date_today.year)
-        if birth < date_today - timedelta(days=1):
-            birth = birth.replace(year=date_today.year+1)
-        day_week = birth.isoweekday()
-        end_date = date_today + timedelta(days=7)
-        if date_today <= birth <= end_date:
-            birthday_per_week.append([name, birth, day_week])
+        if rec.birthday:
+            birth = rec.birthday.value.replace(year=date_today.year)
+            if birth < date_today - timedelta(days=1):
+                birth = birth.replace(year=date_today.year+1)
+            day_week = birth.isoweekday()
+            end_date = date_today + timedelta(days=7)
+            if date_today <= birth <= end_date:
+                birthday_per_week.append([name, birth, day_week])
     if len(birthday_per_week) == 0:
         print(f'\033[38;2;10;235;190mNo Birthday this week.\033[0m')
         return None
@@ -104,9 +106,10 @@ def birthday_in_given_days(value):
     contact_birth = []
     for n, rec in assistent_bot.phone_book.data.items():
         name = n
-        birth = rec.birthday.value.replace(year=date_today.year)
-        if date_today <=  birth <= date_value:
-            contact_birth.append(f'{name}: {rec.birthday.value}')
+        if rec.birthday:
+            birth = rec.birthday.value.replace(year=date_today.year)
+            if date_today <=  birth <= date_value:
+                contact_birth.append(f'{name}: {rec.birthday.value}')
 
     if len(contact_birth) == 0:
         print(f'\033[38;2;10;235;190mNo Birthday during this period.\033[0m')
