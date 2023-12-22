@@ -18,24 +18,30 @@ def birthdays_for_date(day):
         birth = rec.birthday.value.replace(year=date_today.year)
         if birth == date:
             contact_birth.append(name)
-        return contact_birth
+        
     if len(contact_birth) == 0:
         print(f'\033[38;2;10;235;190mNo Birthday this day.\033[0m')
-        return 
-    # return contact_birth
+        return None
+    return contact_birth
 
 # Displaying birthdays for the current date
 def birthdays_for_date_menu():
+    assistent_bot = AssistantBot()
     table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 100)
     table.add_column("Name", style="red", justify="center")
     today_data = datetime.today().date()
     today_data_str = today_data.strftime('%Y.%m.%d')
-    birth = birthdays_for_date(today_data_str)
-    s = ''
-    for el in birth:
-        s += el + ' '
-    table.add_row(s)
-    console.print(table)
+    if not assistent_bot.phone_book:
+        print(f'\033[91mNo contacts.\033[0m')
+        return
+    else:
+        birth = birthdays_for_date(today_data_str)
+        if birth:
+            s = ''
+            for el in birth:
+                s += '| ' + el + ' |'
+            table.add_row(s)
+            console.print(table)
 
 # список имен у кого дни рождения на неделю от сегоднешней даты
 # {'Monday': ['Masha'], 'Tuesday': ['Pavel'], 'Wednesday': ['Stiv']}
@@ -54,7 +60,7 @@ def get_birthdays_per_week():
             birthday_per_week.append([name, birth, day_week])
     if len(birthday_per_week) == 0:
         print(f'\033[38;2;10;235;190mNo Birthday this week.\033[0m')
-        return 
+        return None
     users = defaultdict(list)
     for item in birthday_per_week:
         if item[2] == 1 or item[2] == 6 or item[2] == 7:
@@ -75,15 +81,20 @@ def get_birthdays_per_week():
 
 # List of birthdays this week
 def get_birthdays_per_week_menu():
+    assistent_bot = AssistantBot()
     table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 100)
     table.add_column("Day of the week", style="red", justify="center")
     table.add_column("Names", style="bold blue", justify="center")
+    if not assistent_bot.phone_book:
+        print(f'\033[91mNo contacts.\033[0m')
+        return
     birthdays = get_birthdays_per_week()
-    for k, v in birthdays.items():
-        v_1 = ', '.join(p for p in v)
-        table.add_row(k, v_1)
-    console.print(table)
-    print(birthdays)
+    if birthdays:
+        for k, v in birthdays.items():
+            v_1 = ', '.join(p for p in v)
+            table.add_row(k, v_1)
+        console.print(table)
+
 
 # виводити список контактів, у яких день народження через задану кількість днів від поточної дати
 def birthday_in_given_days(value):
@@ -99,15 +110,19 @@ def birthday_in_given_days(value):
 
     if len(contact_birth) == 0:
         print(f'\033[38;2;10;235;190mNo Birthday during this period.\033[0m')
-        return 
+        return None
     
     return contact_birth
 
 # Displaying birthdays for a number of days
 def birthday_in_given_days_menu():
+    assistent_bot = AssistantBot()
     table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 100)
     table.add_column("Name", style="red", justify="center")
     table.add_column("Date of birth", style="bold blue", justify="center")
+    if not assistent_bot.phone_book:
+        print(f'\033[91mNo contacts.\033[0m')
+        return
     while True:
         print(f'\033[38;2;10;235;190mEnter the required number of days or press ENTER to skip.')
         item_number = input('Enter the number=> \033[0m')
@@ -115,12 +130,13 @@ def birthday_in_given_days_menu():
             if item_number.isdigit() :
                 # Введено число
                 item_number = int(item_number)
-                days_birthd = birthday_in_given_days(item_number)
-                for elem in days_birthd:
-                    item = elem.split(':')
-                    table.add_row(item[0], item[1])
-                console.print(table)
-                return
+                days_birth = birthday_in_given_days(item_number)
+                if days_birth:
+                    for elem in days_birth:
+                        item = elem.split(':')
+                        table.add_row(item[0], item[1])
+                    console.print(table)
+                    return
             elif item_number.isalpha():
                 # Введены буквы
                 print(f'\033[91mYou entered letters: {item_number}\033[0m')
