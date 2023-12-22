@@ -26,7 +26,7 @@ def birthdays_for_date(day):
 
 # Displaying birthdays for the current date
 def birthdays_for_date_menu():
-    table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 50)
+    table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 100)
     table.add_column("Name", style="red", justify="center")
     today_data = datetime.today().date()
     today_data_str = today_data.strftime('%Y.%m.%d')
@@ -75,7 +75,7 @@ def get_birthdays_per_week():
 
 # List of birthdays this week
 def get_birthdays_per_week_menu():
-    table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 50)
+    table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 100)
     table.add_column("Day of the week", style="red", justify="center")
     table.add_column("Names", style="bold blue", justify="center")
     birthdays = get_birthdays_per_week()
@@ -105,7 +105,7 @@ def birthday_in_given_days(value):
 
 # Displaying birthdays for a number of days
 def birthday_in_given_days_menu():
-    table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 50)
+    table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 100)
     table.add_column("Name", style="red", justify="center")
     table.add_column("Date of birth", style="bold blue", justify="center")
     while True:

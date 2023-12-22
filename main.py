@@ -107,13 +107,13 @@ def start_menu():
         'FOR THIS DAY': [birthdays_for_date_menu, 8, 1, "blue"],
         'THIS WEEK': [get_birthdays_per_week_menu, 8, 1, "blue"],
         'FOR A FEW DAYS': [birthday_in_given_days_menu, 8, 1, "blue"],
-        'RETURN TO MAIN MENU': [function_stub, 8, 0, ""],
+        'RETURN TO MAIN MENU': [function_stub, 1, 0, ""],
         'EXIT': [f_exit, 2, 1, ""],
     }
 
     def add_menu(commands_menu, commands_text):
         console = Console()
-        table = Table(show_header = False, style = "cyan")
+        table = Table(show_header = False, style = "cyan", width = 150)
         table.add_column("", style = "bold magenta",
                         width = 50, justify = "center")  # Empty column for left border
 
