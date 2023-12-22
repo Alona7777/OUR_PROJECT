@@ -121,6 +121,5 @@ class NotesManager:
         self.display_all_notes()
 
 
-
 if __name__ == "__main__":
     pass

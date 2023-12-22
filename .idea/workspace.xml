@@ -4,11 +4,71 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d680b160-1a10-4829-9249-29fc54519031" name="Changes" comment="исправил граматику в меню &quot;NOTE&quot;">
-      <change afterPath="$PROJECT_DIR$/contact_generator.py" afterDir="false" />
+    <list default="true" id="d680b160-1a10-4829-9249-29fc54519031" name="Changes" comment="fix Note">
+      <change afterPath="$PROJECT_DIR$/Phone_Book.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Save_Notes.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/trash_folder/MY_OTHER/mw_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Note.py" beforeDir="false" afterPath="$PROJECT_DIR$/Note.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/0618d8e0-2652-3e30-ae44-fd6ff17d55a1.webp" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/MY_OTHER/0618d8e0_2652_3e30_ae44_fd6ff17d55a1.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/duolingo_logo_icon_248988.svg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/SVG/duolingo_logo_icon_248988.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/ex_9.py" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/MY_OTHER/ex_9.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/grupa/GoIT.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPEG/GoIT.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/grupa/doom_eternal_logo_icon_249683.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/doom_eternal_logo_icon_249683.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/grupa/it.svg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/SVG/it.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/grupa/lost_ark_logo_icon_249699.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/lost_ark_logo_icon_249699.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/grupa/python_logo_icon_248739.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/python_logo_icon_248739.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/grupa/Рахунок пошта.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/documents/PDF_DOCUMENTS/Rahunok_poshta.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/grupa/Снимок экрана_2023-10-03_20-53-23.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/Snimok_ekrana_2023_10_03_20_53_23.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/grupa/зображення_viber_2023-01-24_19-01-55-890.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPG/zobrajennu_viber_2023_01_24_19_01_55_890.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/grupa/твір-опис місцевості.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/video/MP4_VIDEO/tvir_opis_mistsevosti.mp4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/openai_logo_icon_248315.svg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/SVG/openai_logo_icon_248315.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/python_logo_icon_248739.svg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/SVG/python_logo_icon_248739.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/school/David Guetta feat. Akon - Sexy Bitch.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/audio/MP3_AUDIO/David_Guetta_feat__Akon___Sexy_Bitch.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/school/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/MY_OTHER/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/school/hogwarts_legacy-wallpaper-1920x1080.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPG/hogwarts_legacy_wallpaper_1920x1080.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/school/wallhaven-0j5gp4_1920x1080.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/wallhaven_0j5gp4_1920x1080.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/school/wallhaven-l8zrmr_1920x1080.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/wallhaven_l8zrmr_1920x1080.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/school/Електромонтаж.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPEG/Elektromontaj.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/school/Тесла.webp" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/MY_OTHER/Tesla.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/school/Фото_2022-11-25_10-42-54_файл.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPEG/Foto_2022_11_25_10_42_54_fajl.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/school/кр.гори.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/documents/PDF_DOCUMENTS/kr_gori.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/wallhaven-4lme9q_1920x1080.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/wallhaven_4lme9q_1920x1080.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/wallhaven-x6zwwd_1920x1080.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/wallhaven_x6zwwd_1920x1080.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/wallhaven-zyo5pv_1920x1080.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/wallhaven_zyo5pv_1920x1080.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/zoom/cisco_logo_icon_247356.svg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/SVG/cisco_logo_icon_247356.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/zoom/ea_logo_icon_249685.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/ea_logo_icon_249685.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/zoom/ms_office_sub_folder_icon_250662.ico" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/MY_OTHER/ms_office_sub_folder_icon_250662.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/zoom/msi_logo_icon_248420.svg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/SVG/msi_logo_icon_248420.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/zoom/pict2_inet.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPG/pict2_inet.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/zoom/string methods.md" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/MY_OTHER/string_methods.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/zoom/wallhaven-2yzjvg_1920x1080.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/wallhaven_2yzjvg_1920x1080.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/zoom/wallpaper_engine_logo_icon_249717.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/wallpaper_engine_logo_icon_249717.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/zoom/список размеров.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/documents/XLSX_DOCUMENTS/spisok_razmerov.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/Кальк.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/documents/TXT_DOCUMENTS/Kalk.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/Односкладні речення.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/documents/PPTX_DOCUMENTS/Odnoskladni_rechennu.pptx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/Снимок экрана_2023-09-25_17-23-26.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/Snimok_ekrana_2023_09_25_17_23_26.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/Спец одяг.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/documents/XLSX_DOCUMENTS/Spets_odug.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/другое/02.12.docx" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/documents/DOCX_DOCUMENTS/02_12.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/другое/GIF-4cfd47fa815cc126ae2986a44f7a31a7.gif" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/MY_OTHER/GIF_4cfd47fa815cc126ae2986a44f7a31a7.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/другое/razer_logo_icon_248693.svg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/SVG/razer_logo_icon_248693.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/другое/wallhaven-28p95m_1920x1080.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/wallhaven_28p95m_1920x1080.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/другое/windows_365_cloud_pc_microsoft_6-wallpaper-1920x1080.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPG/windows_365_cloud_pc_microsoft_6_wallpaper_1920x1080.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/другое/азбука морзе.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPG/azbuka_morze.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/другое/природні зони.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPEG/prirodni_zoni.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/загрузка/2.gif" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/MY_OTHER/2.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/загрузка/Snoop Dogg &amp; David Guetta - Wet (Sweat).mp3" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/audio/MP3_AUDIO/Snoop_Dogg___David_Guetta___Wet__Sweat_.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/загрузка/arxiv@доки.інші.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/загрузка/графік консультацій 8 кл.DOCX" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/documents/DOCX_DOCUMENTS/grafik_konsultatsij_8_kl.DOCX" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/учеба/0-02-05-32e3b250353cb6fa8617f41ed78a02f0975ae8c3ba18e0e7839287ce22d05765_20625016dc85b7.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPG/0_02_05_32e3b250353cb6fa8617f41ed78a02f0975ae8c3ba18e0e7839287ce22d05765_20625016dc85b7.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/учеба/blizzard_logo_icon_249677.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/blizzard_logo_icon_249677.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/учеба/google_chrome_logo_icon_249692.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/google_chrome_logo_icon_249692.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/учеба/icons8-питон.svg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/SVG/icons8_piton.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/учеба/wallhaven-kx36mq_1920x1080.png" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/PNG/wallhaven_kx36mq_1920x1080.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/учеба/Без назви.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/images/JPEG/Bez_nazvi.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/учеба/СКАЙ Я Её Люблю.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/audio/MP3_AUDIO/SKAJ_U_Ee_Lyublyu.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trash_folder/учеба/густина.docx" beforeDir="false" afterPath="$PROJECT_DIR$/trash_folder/documents/DOCX_DOCUMENTS/gustina.docx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +287,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703121455529</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="fix Note">
+      <option name="closed" value="true" />
+      <created>1703279025001</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1703279025001</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -256,6 +324,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added class Note, and add class NotesManager - for working with notes. Missing command for call this feature." />
     <MESSAGE value="исправил граматику в меню &quot;NOTE&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="исправил граматику в меню &quot;NOTE&quot;" />
+    <MESSAGE value="fix Note" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix Note" />
   </component>
 </project>
