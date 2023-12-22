@@ -1,0 +1,38 @@
+from setuptools import setup, find_namespace_packages
+
+setup(
+    name='funny_bot',
+    version='0.0.1',
+    description='Console bot it tells anecdotes and current weather in you city for moment .',
+    author='Rys Igor',
+    author_email='pentagon846@gmail.com',
+    url='http://https://github.com/pentagon846',
+    readme='README.md',
+    requires_python='>=3.10',
+    license='MIT',
+    packages=find_namespace_packages(),
+    install_requires=['questionary==2.0.1',
+                      'requests==2.31.0',
+                      'googletrans==4.0.0rc1',
+                      'pathlib==1.0.1',
+                      'prompt-toolkit==3.0.36',
+                      'tqdm==4.66.1',
+                      'chardet==3.0.4',
+                      'charset-normalizer==3.3.2',
+                      'colorama==0.4.6',
+                      'hstspreload==2023.1.1',
+                      'hyperframe==5.2.0',
+                      'markdown-it-py==3.0.0',
+                      'mdurl==0.1.2',
+                      'Pygments==2.17.2',
+                      'rfc3986==1.5.0',
+                      'rich==13.7.0',
+                      'sniffio==1.3.0',
+                      'termcolor==2.4.0',
+                      'urllib3==2.1.0',
+                      'wcwidth==0.2.12',
+                      'datetime==5.4',
+                      ],
+
+    entry_points={'console_scripts': ['scarab_helper=our_project.main:start_menu']}
+)

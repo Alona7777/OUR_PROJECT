@@ -1,10 +1,9 @@
 import questionary
 from termcolor import colored
-import time
-from contact_book import AssistantBot
+from our_project.contact_book import AssistantBot
 from Note import NotesManager
 from weather import anecdotes_ua_menu, anecdotes_en_menu, weather_menu
-from file_sorter import sorteds_menu
+from our_project.file_sorter import sorteds_menu
 from task_for_birthday import birthdays_for_date_menu, get_birthdays_per_week_menu, birthday_in_given_days_menu
 from rich.console import Console
 from rich.table import Table

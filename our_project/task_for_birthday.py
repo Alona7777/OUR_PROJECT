@@ -1,6 +1,6 @@
-from collections import UserDict, defaultdict
+from collections import defaultdict
 from datetime import date, datetime, timedelta
-from contact_book import AssistantBot, AddressBook, Record, Name, Phone, Birthday
+from our_project.contact_book import AssistantBot
 from rich.console import Console
 from rich.table import Table
 
