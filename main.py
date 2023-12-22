@@ -8,6 +8,7 @@ from file_sorter import sorteds_menu
 from task_for_birthday import birthdays_for_date_menu, get_birthdays_per_week_menu, birthday_in_given_days_menu
 from rich.console import Console
 from rich.table import Table
+from contact_generator import faker
 
 def start_menu():
     assistant_bot = AssistantBot()
@@ -192,3 +193,4 @@ def start_menu():
 
 if __name__ == "__main__":
     start_menu()
+
