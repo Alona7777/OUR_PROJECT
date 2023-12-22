@@ -50,7 +50,6 @@ def start_menu():
         'BIRTHDAY': [assistant_bot.add_birthday_menu, 1, 1, "green"],
         'EMAIL': [assistant_bot.add_email_menu, 1, 1, "blue"],
         'ADDRESS': [assistant_bot.add_address_menu, 1, 1, "yellow"],
-        'NOTE': [notes_manager.note_add_menu, 5, 1, "bright_cyan"],
         'RETURN TO MAIN MENU': [function_stub, 1, 0, ""],
         'EXIT': [f_exit, 0, 0, ""],
     }
@@ -61,7 +60,6 @@ def start_menu():
         'BIRTHDAY': [assistant_bot.edit_birthday_menu, 1, 1, "green"],
         'EMAIL': [assistant_bot.edit_email, 1, 1, "blue"],
         'ADDRESS': [assistant_bot.edit_address, 1, 1, "yellow"],
-        'NOTE': [function_stub, 7, 1, "bright_cyan"],
         'RETURN TO MAIN MENU': [function_stub, 1, 0, ""],
         'EXIT': [f_exit, 0, 0, ""],
     }
@@ -72,7 +70,6 @@ def start_menu():
         'BIRTHDAY': [assistant_bot.delete_birthday_menu, 1, 1, "green"],
         'EMAIL': [assistant_bot.delete_email_menu, 1, 1, "blue"],
         'ADDRESS': [assistant_bot.delete_address_menu, 1, 1, "yellow"],
-        'NOTE': [function_stub, 7, 1, "bright_cyan"],
         'RETURN TO MAIN MENU': [function_stub, 1, 0, ""],
         'EXIT': [f_exit, 0, 0, ""],
     }
@@ -92,6 +89,7 @@ def start_menu():
         'WEATHER': [weather_menu, 6, 1, "blue"],
         'ANECDOTES': [function_stub, 7, 1, "blue"],
         'BIRTHDAY': [function_stub, 8, 1, "green"],
+        # 'CONTACT GENERATOR': [contact_generator_menu, 6, 1, "cyan"],
         'RETURN TO MAIN MENU': [function_stub, 1, 0, ""],
         'EXIT': [f_exit, 2, 1, ""],
     }
@@ -113,7 +111,7 @@ def start_menu():
 
     def add_menu(commands_menu, commands_text):
         console = Console()
-        table = Table(show_header = False, style = "cyan", width = 150)
+        table = Table(show_header = False, style = "cyan")
         table.add_column("", style = "bold magenta",
                         width = 50, justify = "center")  # Empty column for left border
 
