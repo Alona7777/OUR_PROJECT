@@ -19,7 +19,7 @@ class NotesManager:
         self.read_from_file()
         
     def table_print_note(self):
-        table = Table(title="Note Information", style="cyan", title_style="bold magenta")
+        table = Table(title="Note Information", style="cyan", title_style="bold magenta", width = 100)
         table.add_column("Content", style="bold green", justify="center")
         table.add_column("Tags", style="bold blue", justify="center")
     
@@ -55,7 +55,7 @@ class NotesManager:
         return [note for note in self.notes if tag in note.tags]
             
     def display_all_notes(self):
-        table = Table(title="Note Information", style="cyan", title_style="bold magenta")
+        table = Table(title="Note Information", style="cyan", title_style="bold magenta", width = 100)
         table.add_column("Content", style="bold blue", justify="center")
         table.add_column("Tags", style="bold blue", justify="center")
         if not self.notes:
@@ -104,7 +104,7 @@ class NotesManager:
         self.write_to_file()
 
     def note_search_menu(self):
-        table = Table(title="Note Information", style="cyan", title_style="bold magenta")
+        table = Table(title="Note Information", style="cyan", title_style="bold magenta", width = 100)
         table.add_column("Content", style="bold blue", justify="center")
         table.add_column("Tags", style="bold blue", justify="center")
         tag_to_search = input('Enter tag for search and sort: ')
