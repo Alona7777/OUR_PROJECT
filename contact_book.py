@@ -621,12 +621,14 @@ class AssistantBot:
         print(f'\033[38;2;10;235;190mEnter how many records to display or press ENTER to skip.\033[0m')
         item_number = input('Enter number=> ')
         if not self.phone_book:
-            print('No contacts')
+            print(f'\033[91mNo contacts.\033[0m')
+            return
         if item_number:
             try:
                 item_number = int(item_number)
             except ValueError:
                 print(f'\033[91mYou entered letters: {item_number}. Please enter only numbers.\033[0m')
+                
             iteration_count = 0
             for name, record in self.phone_book.data.items():
                 phone_str = "\n".join("; ".join(p.value for p in record.phones[i:i + 2]) for i in range(0, len(record.phones), 2))
@@ -650,7 +652,7 @@ class AssistantBot:
                                 str(record.address), 
                                 str(record.days_to_birthday())
                                 )
-            self.console.print(table)
+                self.console.print(table)
 
     # выход из програмы и сохранение файла!
     def exit(self):
