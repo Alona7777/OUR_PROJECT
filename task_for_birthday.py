@@ -102,14 +102,17 @@ def get_birthdays_per_week_menu():
 def birthday_in_given_days(value):
     assistent_bot = AssistantBot()
     date_today = date.today()
-    date_value = date_today + timedelta(days=value)         
+    date_value = date_today + timedelta(days=value) 
+    print(date_value)        
     contact_birth = []
     for n, rec in assistent_bot.phone_book.data.items():
         name = n
         if rec.birthday:
             birth = rec.birthday.value.replace(year=date_today.year)
+            if birth < date_today - timedelta(days=1):
+                birth = birth.replace(year=date_today.year+1)
             if date_today <=  birth <= date_value:
-                contact_birth.append(f'{name}: {rec.birthday.value}')
+                contact_birth.append(f'{name}; {rec.birthday.value}; {rec.days_to_birthday()}')
 
     if len(contact_birth) == 0:
         print(f'\033[38;2;10;235;190mNo Birthday during this period.\033[0m')
@@ -123,21 +126,23 @@ def birthday_in_given_days_menu():
     table = Table(title="Birthdays information", style="cyan", title_style="bold magenta", width = 100)
     table.add_column("Name", style="red", justify="center")
     table.add_column("Date of birth", style="bold blue", justify="center")
+    table.add_column("Day to birthday", style="bold blue", justify="center")
     if not assistent_bot.phone_book:
         print(f'\033[91mNo contacts.\033[0m')
         return
     while True:
-        print(f'\033[38;2;10;235;190mEnter the required number of days or press ENTER to skip.')
-        item_number = input('Enter the number=> \033[0m')
+        print(f'\033[38;2;10;235;190mEnter the required number of days (no more than one year) or press ENTER to skip.\033[0m')
+        item_number = input('\033[38;2;10;235;190mEnter the number=> \033[0m')
         if item_number:
-            if item_number.isdigit() :
+            if item_number.isdigit() and item_number <= '365':
                 # Введено число
                 item_number = int(item_number)
                 days_birth = birthday_in_given_days(item_number)
+                # print(days_birth)
                 if days_birth:
                     for elem in days_birth:
-                        item = elem.split(':')
-                        table.add_row(item[0], item[1])
+                        item = elem.split(';')
+                        table.add_row(item[0], item[1], item[2])
                     console.print(table)
                     return
             elif item_number.isalpha():
@@ -145,7 +150,7 @@ def birthday_in_given_days_menu():
                 print(f'\033[91mYou entered letters: {item_number}\033[0m')
             else:
                 # Введены буквы
-                print(f'\033[91mYou entered lettersYou entered letters.: {item_number}\033[0m')
+                print(f'\033[91mYou entered a mumber greater than one year: {item_number}\033[0m')
 
         return
 
