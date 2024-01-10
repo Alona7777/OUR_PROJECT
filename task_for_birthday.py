@@ -1,10 +1,10 @@
 from collections import UserDict, defaultdict
 from datetime import date, datetime, timedelta
-from contact_book import AssistantBot, AddressBook, Record, Name, Phone, Birthday
+from contact_book import AssistantBot
 from rich.console import Console
 from rich.table import Table
-
-
+from addressbook import AddressBook
+from record import Record, Phone, Birthday
 console = Console()
 
 # список имен у кого день рождения на указанною дату
