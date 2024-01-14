@@ -1,0 +1,707 @@
+from collections import UserDict
+import cmd
+from datetime import date, datetime, timedelta
+import pickle
+import os
+
+
+class Field:
+    def __init__(self, value):
+        self.__value = None
+        self.value = value
+
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, value):
+        self.__value = value
+
+    def __str__(self):
+        return str(self.__value)
+
+
+class Name(Field):
+    pass
+
+
+class Birthday(Field):
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, value: str):
+        try:
+            self.__value = datetime.strptime(value, '%Y.%m.%d').date()
+        except ValueError:
+            raise ValueError('The birsday date must be in format: 2022.01.01')
+
+    def __str__(self):
+        return self.__value.strftime('%Y.%m.%d')
+
+class Phone(Field):
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, value):
+        if len(value) != 10 or not value.isdigit():
+            raise ValueError('The phone number should be digits only and have 10 symbols')
+        self.__value = value
+
+    
+class Note:
+    def __init__(self, content, tags=None):
+        if tags is None:
+            tags = []
+        self.content = content
+        self.tags = tags
+
+
+class NotesManager:
+    def __init__(self):
+        self.notes = []
+
+    def add_note(self, content, tags=None):
+        if tags is None:
+            tags = []
+        note = Note(content, tags)
+        self.notes.append(note)
+
+    def search_notes_by_tag(self, tag):
+        return [note for note in self.notes if tag in note.tags]
+
+    def display_all_notes(self):
+        if not self.notes:
+            print('List empty')
+        for i, note in enumerate(self.notes, 1):
+            print(f"{i}. Content:{note.content}, Tags:{note.tags}")
+
+    def edit_note_content(self, index, new_content):
+        if 1 <= index <= len(self.notes):
+            self.notes[index - 1].content = new_content
+        else:
+            print("Invalid note index.")
+
+    def delete_note_by_index(self, index):
+        if 1 <= index <= len(self.notes):
+            del self.notes[index - 1]
+        else:
+            print("Invalid note index.")
+
+
+class Record:
+    def __init__(self, name: str):
+        self.name = Name(name)
+        self.phones = []
+        self.birthday = None
+
+    def add_phone(self, value: str):
+        phone = Phone(value)
+        self.phones.append(phone)
+
+    def add_birthday(self, birthday: str):
+        self.birthday = Birthday(birthday)
+
+    def remove_phone(self, phone: str):
+        for item in self.phones:
+            if item.value == phone:
+                self.phones.remove(item)
+                return f'The phone number: {phone} has been deleted'   
+        return f'The phone number {phone} not found'
+
+    def edit_phone(self, old_phone: str, new_phone: str):
+        for phone in self.phones:
+            if phone.value == old_phone:
+                phone.value = new_phone
+                return f'Phones: {"; ".join(p.value for p in self.phones)}'
+        raise ValueError(f'Phone: {old_phone} not found!')
+
+    def find_phone(self, phone: str):
+        for item in self.phones:
+            if item.value == phone:
+                return item
+        return None
+
+    def days_to_birthday(self):
+        if self.birthday is None:
+            return None
+        date_today = date.today()
+        birthday_date = self.birthday.value.replace(year=date_today.year)
+        if date_today == birthday_date:
+            return 'Birthday today'
+        if birthday_date <= date_today - timedelta(days=1):
+            birthday_date = birthday_date.replace(year=date_today.year + 1)
+        day_to_birthday = (birthday_date - date_today).days
+        return day_to_birthday
+
+    def __str__(self):
+        return f"|| Name: {self.name.value}  || Phones: {'; '.join(p.value for p in self.phones)}; "\
+               f"|| Birthday: {self.birthday} "\
+               f"|| Days to birthday: {self.days_to_birthday()}||"
+
+        # return '||Name: {:^10}||Phones: {:<20}||Day to Birthday: {:^7}'.format(self.name.value, '; '.join(p.value for p in self.phones), self.days_to_birthday())
+
+
+class AddressBook(UserDict):
+    def __init__(self):
+        super().__init__()
+        self.file = 'Phone_Book.bin'
+
+    def add_record(self, record: Record):
+        self.data[record.name.value] = record
+
+    def find(self, name: str):
+        lower_name = name.lower()
+        for key, record in self.data.items():
+            if key.lower() == lower_name:
+                return record
+        return None
+        
+    def search(self, value: str):                    
+        if len(value) < 3:
+            return 'To search by name you need at least 3 letters or 3 numbers to search by phone number'
+        search_contact = []
+        for name, rec in self.data.items():
+            if value in name:
+                search_contact.append(name)
+            for item in rec.phones:
+                if value in item.value:
+                    search_contact.append(name)    
+        if len(search_contact) != 0:
+            return search_contact
+        else:
+            return 'No matches found'
+
+    def delete(self, name: str):
+        if name in self.data:
+            self.data.pop(name)
+            return f'The contact {name} has been deleted'
+        else:
+            return f'The contact {name} not found'
+        
+    def iterator(self, item_number):
+        counter = 0
+        result = ''
+        for item, record in self.data.items():
+            result += f'{item}: {record}\n'
+            counter += 1
+            if counter >= item_number:
+                yield result
+                counter = 0
+                result = ''
+        yield result
+     
+    def write_to_file(self):
+        with open(self.file, 'wb') as file:
+            pickle.dump(self.data, file)
+    
+    def read_from_file(self):
+        with open(self.file, 'rb') as file:
+            self.data = pickle.load(file)
+        return self.data
+        
+
+class Controller(cmd.Cmd):
+    def exit(self):
+        self.book.dump()
+        return True 
+
+    # декоратор по исправлению ошибок. НАПИСАН КОРЯВО, нужно редактировать!!!
+
+
+def input_error(func):
+    def inner(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+            return result
+        except KeyError:
+            return 'No user with this name'
+        except ValueError:
+            return 'The phone number should be digits only and have 10 symbols'
+        except IndexError:
+            return 'Enter user name'
+    return inner      
+
+
+'''эта часть кода отвечает за выполнение команд'''
+
+
+class AssistantBot:
+    def __init__(self):
+        self.phone_book = AddressBook()
+        if os.path.isfile(self.phone_book.file):      # запуск файла с сохранеными контактами!!!
+            self.phone_book.read_from_file()
+    
+    # добавление нового контакта
+    @input_error
+    def add_contact(self):
+        name = input('Enter name=> ')
+        record = Record(name)
+
+        while True:
+            print('Do you want to add the phone number? Please enter the number:\n1.YES\n2.NO')
+            res_1 = input('Enter your text=>  ').lower()
+            if res_1 in ('1', 'yes'):
+                self.add_phone(record)
+                break
+            elif res_1 in ('2', 'no'):
+                break
+            else:
+                print("Invalid input. Please enter '1' for YES or '2' for NO.")
+
+        while True:
+            print('Do you want to add the date of birthday? Please enter the number:\n1.YES\n2.NO')
+            res_2 = input('Enter your text=>  ').lower()
+            if res_2 in ('1', 'yes'):
+                self.add_birthday(record)
+                break
+            elif res_2 in ('2', 'no'):
+                break
+            else:
+                print("Invalid input. Please enter '1' for YES or '2' for NO.")
+
+        self.phone_book.add_record(record)
+        return f'You have created a new contact:\n{str(record)}'
+
+    
+    @input_error
+    def add_phone(self, record):
+        while True:
+            try:
+                phone = input('Enter phone=> ')
+                record.add_phone(phone)
+                self.phone_book.add_record(record)
+                return '\033[92mThe phone number added successfully\033[0m'  # Сообщение о успешном добавлении
+            except ValueError as e:
+                print(e)
+
+    # добавление даты рождения
+
+    @input_error   
+    def input_year(self):
+        while True:
+            year = input('Enter the year (YYYY)=> ')
+            if year.isdigit() and 1900 <= int(year) <= 2100:
+                return year
+            else:
+                print("Invalid year. Please enter a valid year in format YYYY.")
+
+    def input_month(self):
+        while True:
+            month = input('Enter the month (MM)=> ')
+            if month.isdigit() and 1 <= int(month) <= 12:
+                return month.zfill(2)  # Добавляем ведущий ноль, если нужно
+            else:
+                print("Invalid month. Please enter a valid month (1-12).")
+
+    def input_day(self):
+        while True:
+            day = input('Enter the day (DD)=> ')
+            if day.isdigit() and 1 <= int(day) <= 31:  # Простая проверка, не учитывающая количество дней в месяце
+                return day.zfill(2)  # Добавляем ведущий ноль, если нужно
+            else:
+                print("Invalid day. Please enter a valid day (1-31).")
+
+    def add_birthday(self, record):
+        if not record:
+            print('\033[91mThe contact does not exist\033[0m')
+            return
+
+        year = self.input_year()
+        month = self.input_month()
+        day = self.input_day()
+
+        birth = f'{year}.{month}.{day}'
+        try:
+            record.add_birthday(birth)
+            self.phone_book.add_record(record)
+            return f'You added the date of birthday {birth} to the contact:\n{str(record)}'
+        except ValueError as e:
+            print(e)
+            print('Please enter a valid date in format YYYY.MM.DD')
+            return self.add_birthday(record)  # Повторный вызов функции при ошибке ввода
+     
+    def search_contact_for_deletion(self):
+        print("Search contact for deletion by:\n1. Name\n2. Phone Number\n3. Birthday")
+        choice = input("Enter your choice (1, 2, or 3)=> ").strip()
+
+        if choice == "1":
+            name = input("Enter the name of the contact=> ")
+            return self.phone_book.find(name)
+        elif choice == "2":
+            phone = input("Enter the phone number=> ")
+            for record in self.phone_book.values():
+                if any(phone == p.value for p in record.phones):
+                    return record
+        elif choice == "3":
+            birthday_input = input("Enter the birthday (YYYY.MM.DD)=> ")
+            for record in self.phone_book.values():
+                if record.birthday and record.birthday.value.strftime('%Y.%m.%d') == birthday_input:
+                    return record
+                
+    def valid_birthday_format(self, birthday_input):
+        try:
+            datetime.strptime(birthday_input, '%Y.%m.%d')
+            return True
+        except ValueError:
+            return False
+
+    def input_birthday(self):
+        while True:
+            birthday_input = input("Enter the birthday (YYYY.MM.DD)=> ")
+            if self.valid_birthday_format(birthday_input):
+                return birthday_input
+            else:
+                print("Invalid format. Please enter a valid date in format YYYY.MM.DD.")
+    def search_contact_for_deletion(self):
+        while True:
+            print("Search contact for deletion by:\n1. Name\n2. Phone Number\n3. Birthday\n4. RETURN TO MAIN MENU")
+            choice = input("Enter your choice (1, 2, 3 or 4)=> ").strip()
+
+            if choice == "1":
+                name = input("Enter the name of the contact=> ")
+                return self.phone_book.find(name)
+            elif choice == "2":
+                phone = input("Enter the phone number=> ")
+                for record in self.phone_book.values():
+                    if any(phone == p.value for p in record.phones):
+                        return record
+            elif choice == "3":
+                birthday_input = input("Enter the birthday (YYYY.MM.DD)=> ")
+                if self.valid_birthday_format(birthday_input):
+                    for record in self.phone_book.values():
+                        if record.birthday and record.birthday.value.strftime('%Y.%m.%d') == birthday_input:
+                            return record
+                    print("Contact not found.")
+                else:
+                    print("The format is incorrect. Please try again.")
+            elif choice == "4":
+                return None
+
+    def delete_contact(self):
+        record = self.search_contact_for_deletion()
+        if not record:
+            print("Contact not found.")
+            return
+
+        print("Found contact:")
+        print(record)
+        confirmation = input("Are you sure you want to delete this contact? (yes/no)=> ").lower()
+        if confirmation == "yes":
+            del self.phone_book[record.name.value]
+            print("Contact deleted.")
+        else:
+            print("Deletion cancelled.")
+
+    def valid_birthday_format(self, birthday_input):
+        try:
+            datetime.strptime(birthday_input, '%Y.%m.%d')
+            return True
+        except ValueError:
+            return False
+
+    def search_contact_for_deletion(self):
+        while True:
+            print("Search contact for deletion by:\n1. Name\n2. Phone Number\n3. Birthday\n4. RETURN TO MAIN MENU")
+            choice = input("Enter your choice (1, 2, 3 or 4)=> ").strip()
+
+            if choice == "1":
+                name = input("Enter the name of the contact=> ")
+                contact = self.phone_book.find(name)
+                if contact:
+                    return contact
+                else:
+                    print("Contact not found.")
+            elif choice == "2":
+                phone = input("Enter the phone number=> ")
+                found = False
+                for record in self.phone_book.values():
+                    if any(phone == p.value for p in record.phones):
+                        found = True
+                        return record
+                if not found:
+                    print("Phone number not found.")
+            elif choice == "3":
+                while True:
+                    birthday_input = input("Enter the birthday (YYYY.MM.DD)=> ")
+                    if self.valid_birthday_format(birthday_input):
+                        for record in self.phone_book.values():
+                            if record.birthday and record.birthday.value.strftime('%Y.%m.%d') == birthday_input:
+                                return record
+                        print("Birthday not found.")
+                        break
+                    else:
+                        print("The format is incorrect. Please try again.")
+            elif choice == "4":
+                return None
+
+    def delete_contact(self):
+        record = self.search_contact_for_deletion()
+        if not record:
+            print("Contact not found.")
+            return
+
+        print("Found contact:")
+        print(record)
+        confirmation = input("Are you sure you want to delete this contact? (yes/no)=> ").lower()
+        if confirmation == "yes":
+            del self.phone_book[record.name.value]
+            print("Contact deleted.")
+        else:
+            print("Deletion cancelled.")
+
+    @input_error
+    def delete(self):
+        while True:
+            print('='*100)
+            print('You can delete:\n1.CONTACT\n2.RETURN TO MAIN MENU')
+            choice = input('Enter your text=> ').lower()
+
+            if choice == '1':
+                self.delete_contact()
+                break  # Exit the loop after deleting the contact
+            elif choice == '2':
+                break  # Exit the loop to return to the main menu
+            else:
+                print("Invalid choice. Please enter again.")
+
+    # "меню" для добавления  
+
+
+    @input_error
+    def add(self):
+        while True:
+            print('='*100)
+            print('You can add:\n1.CONTACT\n2.PHONE\n3.BIRTHDAY\n4.RETURN TO MAIN MENU')
+            res = input('Enter your text=>  ').lower()
+
+            if res == '1':  # Добавить контакт
+                return self.add_contact()
+
+            elif res == '2':  # Добавить телефон
+                name = input('Enter the name of an existing contact=> ')
+                record = self.phone_book.find(name)
+                if record:
+                    return self.add_phone(record)
+                else:
+                    print('\033[91mThe contact does not exist\033[0m')
+                    continue  # Вернуться к началу цикла
+
+            elif res == '3':  # Добавить день рождения
+                name = input('Enter the name of an existing contact=> ')
+                record = self.phone_book.find(name)
+                if record:
+                    return self.add_birthday(record)
+                else:
+                    print('\033[91mThe contact does not exist\033[0m')
+                    continue  # Вернуться к началу цикла
+
+            elif res == '4':  # Возврат в главное меню
+                return
+
+            else:
+                print("The command doesn't exist. Please enter again")
+    
+    # изменение телефона
+    @input_error
+    def change_phone(self, record):
+        while True:
+            new_phone = input('Enter the new phone number=> ')
+            try:
+                if new_phone:
+                    if record.phones:
+                        record.phones[0].value = new_phone  # Предполагаем, что у контакта только один номер
+                        return f'Phone number changed successfully to {new_phone}'
+                    else:
+                        return 'No existing phone number found'
+                else:
+                    print("Phone change cancelled")
+                    return
+            except ValueError as e:
+                print(e)
+                continue
+    
+    # изменение даты рождения
+    @input_error    
+    def change_birth(self, record):
+        self.add_birthday(record)
+        return f'You changed the contact:\n{str(record)}' 
+    
+
+    @input_error
+    def change(self):
+        while True:
+            print('='*100)
+            print('You can change:\n1.NAME\n2.PHONE NUMBER\n3.RETURN TO MAIN MENU')
+            res = input('Enter your text=>  ').lower()
+
+            if res == '3':  # Возврат в главное меню
+                return
+
+            elif res in ['1', '2']:  # Обработка изменений NAME или PHONE NUMBER
+                name = input('Enter the name of the contact to change=> ')
+                record = self.phone_book.find(name)
+                if record is None:
+                    print('\033[91mThe contact was not found\033[0m')
+                else:
+                    if res == '1':
+                        return self.change_name(record)
+                    elif res == '2':
+                        return self.change_phone(record)
+
+            else:
+                print("The answer doesn't exist. Please enter again")
+    
+    @input_error
+    def change_name(self, record):
+        if not record:
+            print('\033[91mThe contact was not found\033[0m')
+            return
+        new_name = input('Enter new name=> ')
+        if new_name:
+            old_name = record.name.value
+            self.phone_book.data[new_name] = self.phone_book.data.pop(old_name)
+            record.name.value = new_name
+            return f'Name changed successfully from {old_name} to {new_name}'
+        else:
+            return 'Name change cancelled'
+        
+    def valid_birthday_format(self, birthday_input):
+        try:
+            datetime.strptime(birthday_input, '%Y.%m.%d')
+            return True
+        except ValueError:
+            return False
+
+    def input_birthday(self):
+        while True:
+            birthday_input = input("Enter the birthday (YYYY.MM.DD)=> ")
+            if self.valid_birthday_format(birthday_input):
+                return birthday_input
+            else:
+                print("Invalid format. Please enter a valid date in format YYYY.MM.DD.")
+
+    def add_birthday(self, record):
+        if not record:
+            print('\033[91mThe contact does not exist\033[0m')
+            return
+
+        birthday_input = self.input_birthday()
+        try:
+            record.add_birthday(birthday_input)
+            self.phone_book.add_record(record)
+            return f'You added the date of birthday {birthday_input} to the contact:\n{str(record)}'
+        except ValueError as e:
+            print(e)
+            return self.add_birthday(record)  # Повторный вызов функции при ошибке ввода
+
+         
+    @input_error
+    def change(self):
+        while True:
+            print('='*100)
+            print('You can change:\n1.NAME\n2.PHONE NUMBER\n3.RETURN TO MAIN MENU')
+            res = input('Enter your text=>  ').lower()
+
+            if res == '3':  # Возврат в главное меню
+                return
+
+            elif res in ['1', '2']:  # Обработка изменений NAME или PHONE NUMBER
+                name = input('Enter the name of the contact to change=> ')
+                record = self.phone_book.find(name)
+                if record is None:
+                    print('\033[91mThe contact was not found\033[0m')
+                else:
+                    if res == '1':
+                        return self.change_name(record)
+                    elif res == '2':
+                        return self.change_phone(record)
+
+            else:
+                print("The answer doesn't exist. Please enter again")
+# поиск по имени и по совпадениям
+    @input_error
+    def search(self):
+        while True:
+            print('='*100)
+            print('You can search:\n1.BY NAME\n2.BY PHONE NUMBER\n3.RETURN TO MAIN MENU')
+            res = input('Enter your text=>  ').lower()
+            
+            if res == '3':  # Возврат в главное меню
+                return
+
+            elif res == '1':  # Поиск по имени
+                name = input('Enter name=> ')
+                result = self.phone_book.find(name)
+                return result if result else 'Contact not found'
+
+            elif res == '2':  # Поиск по номеру телефона
+                phone = input('Enter at least three digits of the phone number=> ')
+                return self.phone_book.search(phone)
+
+            else:
+                print("The answer doesn't exist. Please enter again")
+
+
+    # работа через интератор не сделана правильно
+    @input_error
+    def show_all(self):
+        print('='*100)
+        print('Do you want to display all contacts? Please enter the number:\n1.YES\n2.NO')
+        res = input('Enter your text=>  ').lower()
+        if res == '1' or res == 'yes':
+            if self.phone_book:
+                phones = f'Contacts:\n'
+                for name, record in self.phone_book.data.items():
+                    phones += f'{str(record)}\n'
+                return phones
+            else:
+                return 'No contacts'
+        print('How many contacts to display?')
+        res_1 = input('Enter your text=>  ')
+        if res_1.isdigit():
+            return self.phone_book.iterator(res_1)
+        
+        # выход из програмы и сохранение файла!
+    def exit(self):
+        self.phone_book.write_to_file()
+        return 
+
+# эта часть отвечает за команды телефонной книги, нет адреса и email  
+
+
+def main():
+    assistent_bot = AssistantBot()
+    print('Hello!')
+    while True:
+        print('=' * 100)
+        print('How can I help you?\nPlease enter the number:\n1.ADD\n2.CHANGE\n3.DELETE\n4.SEARCH\n5.SHOW ALL\n6.EXIT')
+        command = input('Enter your text=>  ').lower()
+        if command in ('1', 'add'):
+            result = assistent_bot.add()
+        elif command in ('2', 'change'):
+            result = assistent_bot.change()
+        elif command in ('3', 'delete'):
+            result = assistent_bot.delete()
+        elif command in ('4', 'search'):
+            result = assistent_bot.search() 
+        elif command in ('5', 'show all', 'show'):
+            result = assistent_bot.show_all()
+        elif command in ('6', 'exit'):
+            assistent_bot.exit()
+            print('Good bye!')
+            break
+        else:
+            print("The command doesn't exist. Please enter again")
+            continue
+
+        if result:
+            print(result)
+
+if __name__ == "__main__":
+    main()     
+       
